@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Portal Access</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .hidden { display: none !important; }
+        .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #2563eb; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; margin: 0 auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans min-h-screen flex items-center justify-center p-4">
+
+    <!-- Screen 1: Login / Phone Number -->
+    <div id="screen-login" class="bg-white p-8 rounded-xl shadow-lg max-w-md w-full">
+        <h2 class="text-2xl font-bold mb-2 text-center text-gray-900">Course Access</h2>
+        <p class="text-gray-500 mb-6 text-center text-sm">Enter your phone number to buy the course or resume watching.</p>
+        <input type="text" id="phone" placeholder="e.g. 0770XXXXXXX" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-blue-500 outline-none">
+        <button onclick="handleLogin()" class="w-full bg-blue-600 text-white font-bold p-3 rounded-lg hover:bg-blue-700 transition">Continue</button>
+    </div>
+
+    <!-- Screen 2: Payment Instructions -->
+    <div id="screen-payment" class="bg-white p-8 rounded-xl shadow-lg max-w-md w-full hidden">
+        <h2 class="text-2xl font-bold mb-2 text-gray-900">Complete Purchase</h2>
+        <div class="bg-blue-50 p-4 rounded-lg mb-6 border border-blue-100">
+            <p class="text-sm text-blue-800 mb-1">Transfer exactly <strong>15,000 IQD</strong> to:</p>
+            <h3 class="text-xl font-bold text-blue-900" id="display-account"></h3>
+            <div class="mt-3 p-2 bg-red-100 text-red-800 text-sm font-bold rounded">
+                CRITICAL: Include this code in the transfer note: <span id="display-code" class="text-lg"></span>
+            </div>
+        </div>
+        
+        <label class="block text-sm font-medium text-gray-700 mb-1">Qi Transaction ID (رقم الإشعار)</label>
+        <input type="text" id="tx-id" placeholder="Enter Transaction ID" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-blue-500 outline-none">
+        
+        <label class="block text-sm font-medium text-gray-700 mb-1">Upload Receipt Screenshot</label>
+        <input type="file" id="receipt" accept="image/*" class="w-full p-2 border border-gray-300 rounded-lg mb-6">
+        
+        <button onclick="submitPayment()" class="w-full bg-green-600 text-white font-bold p-3 rounded-lg hover:bg-green-700 transition">Submit for Verification</button>
+    </div>
+
+    <!-- Screen 3: Verification Loading -->
+    <div id="screen-review" class="bg-white p-8 rounded-xl shadow-lg max-w-md w-full hidden text-center">
+        <div class="spinner mb-4"></div>
+        <h2 class="text-xl font-bold text-gray-900 mb-2">Verifying Payment...</h2>
+        <p class="text-gray-500 text-sm">Please keep this window open. An admin is reviewing your receipt. Approvals usually take 2-5 minutes.</p>
+    </div>
+
+    <!-- Screen 4: The Course Dashboard -->
+    <div id="screen-course" class="w-full max-w-6xl h-[85vh] bg-white rounded-xl shadow-lg hidden flex overflow-hidden">
+        
+        <!-- Sidebar Navigation -->
+        <div class="w-1/4 bg-gray-900 text-white p-6 flex flex-col">
+            <h3 class="text-xl font-bold mb-6 border-b border-gray-700 pb-4">Modules</h3>
+            <ul id="module-list" class="space-y-3 flex-grow overflow-y-auto">
+                <!-- Modules injected by JS -->
+            </ul>
+            <div class="mt-auto border-t border-gray-700 pt-4">
+                <button onclick="location.reload()" class="w-full text-left text-sm text-gray-400 hover:text-white flex items-center">
+                    ← Log Out
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Video & Content Area -->
+        <div class="w-3/4 flex flex-col h-full bg-gray-50 overflow-y-auto">
+            <div class="w-full bg-black">
+                <iframe id="course-video" class="w-full aspect-video" src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="p-8">
+                <h1 id="course-title" class="text-3xl font-bold text-gray-900 mb-4"></h1>
+                <div class="prose max-w-none text-gray-700" id="course-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUserPhone = '';
+        let currentOrderCode = '';
+        let pollingInterval;
+
+        function switchScreen(screenId) {
+            ['screen-login', 'screen-payment', 'screen-review', 'screen-course'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById(screenId).classList.remove('hidden');
+            document.body.classList.remove('items-center', 'justify-center', 'p-4');
+            if(screenId !== 'screen-course') {
+                document.body.classList.add('items-center', 'justify-center', 'p-4');
+            }
+        }
+
+        async function handleLogin() {
+            const phone = document.getElementById('phone').value.trim();
+            if (!phone) return alert('Enter a valid phone number');
+            
+            currentUserPhone = phone;
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone })
+            });
+            const data = await res.json();
+            
+            currentOrderCode = data.orderCode;
+            document.getElementById('display-account').innerText = data.qiAccount;
+            document.getElementById('display-code').innerText = data.orderCode;
+
+            // Route user based on database status
+            if (data.status === 'approved') {
+                loadCourseData();
+            } else if (data.status === 'review') {
+                switchScreen('screen-review');
+                pollingInterval = setInterval(checkStatus, 3000);
+            } else {
+                switchScreen('screen-payment');
+            }
+        }
+
+        async function submitPayment() {
+            const txId = document.getElementById('tx-id').value;
+            const fileInput = document.getElementById('receipt').files[0];
+
+            if (!txId || !fileInput) return alert('TX ID and screenshot are required');
+
+            const formData = new FormData();
+            formData.append('orderCode', currentOrderCode);
+            formData.append('phone', currentUserPhone);
+            formData.append('txId', txId);
+            formData.append('receipt', fileInput);
+
+            const res = await fetch('/api/submit-receipt', { method: 'POST', body: formData });
+            const data = await res.json();
+            
+            if (res.ok) {
+                switchScreen('screen-review');
+                pollingInterval = setInterval(checkStatus, 3000);
+            } else {
+                alert('Error: ' + data.error);
+            }
+        }
+
+        async function checkStatus() {
+            const res = await fetch('/api/status/' + currentOrderCode);
+            const data = await res.json();
+
+            if (data.status === 'approved') {
+                clearInterval(pollingInterval);
+                loadCourseData();
+            } else if (data.status === 'rejected') {
+                clearInterval(pollingInterval);
+                alert('Payment rejected by admin. Please check your transaction details and resubmit.');
+                switchScreen('screen-payment');
+            }
+        }
+
+        async function loadCourseData() {
+            const res = await fetch('/api/course-data/' + currentUserPhone);
+            if (!res.ok) return alert('Session expired or unauthorized.');
+            
+            const data = await res.json();
+            document.getElementById('course-video').src = data.videoUrl;
+            document.getElementById('course-title').innerText = data.title;
+            document.getElementById('course-text').innerText = data.content;
+            
+            const moduleList = document.getElementById('module-list');
+            moduleList.innerHTML = '';
+            data.modules.forEach(mod => {
+                moduleList.innerHTML += `<li class="p-3 bg-gray-800 rounded-lg text-gray-300 hover:bg-blue-600 hover:text-white cursor-pointer transition">${mod.title}</li>`;
+            });
+
+            switchScreen('screen-course');
+        }
+    </script>
+</body>
+</html>
