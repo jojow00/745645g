@@ -1,7 +1,7 @@
 {
-  "name": "course-platform",
-  "version": "1.0.0",
-  "description": "Course checkout platform with Telegram approval",
+  "name": "course-platform-pro",
+  "version": "2.0.0",
+  "description": "Premium course platform with Telegram admin approval",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
