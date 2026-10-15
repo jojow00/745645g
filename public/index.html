@@ -1,178 +1,451 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" translate="no" class="notranslate">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Portal - Streamer Mastery</title>
+    <meta name="google" content="notranslate">
+    <title>أكاديمية صناعة المقاطع | Streamer Clipping Masterclass</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Inter:wght@400;700;900&display=swap');
-        body { font-family: 'Cairo', sans-serif; background: #0f172a; color: white; overflow-x: hidden; }
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap');
+        
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background-color: #070b14; 
+            color: #f8fafc; 
+            overflow-x: hidden; 
+        }
         html[lang="en"] body { font-family: 'Inter', sans-serif; }
-        
-        .animated-bg {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
-            background: linear-gradient(45deg, #0f172a, #1e293b, #020617);
-            background-size: 400% 400%; animation: gradientBG 15s ease infinite;
-        }
-        @keyframes gradientBG { 0% {background-position: 0% 50%;} 50% {background-position: 100% 50%;} 100% {background-position: 0% 50%;} }
-        
-        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1rem; }
-        .hidden { display: none !important; }
-        
-        /* Prose styling for the massive course content */
-        .prose h2, .prose h3 { color: #eab308; font-weight: 900; margin-top: 2rem; margin-bottom: 1rem; border-bottom: 1px solid #334155; padding-bottom: 0.5rem; }
-        .prose h4 { color: #f8fafc; font-weight: 700; margin-top: 1.5rem; }
-        .prose p { margin-bottom: 1rem; line-height: 1.8; font-size: 1.05rem; }
-        .prose ul, .prose ol { margin-left: 1.5rem; margin-bottom: 1.5rem; margin-top: 0.5rem; }
-        .prose li { margin-bottom: 0.5rem; }
-        html[lang="ar"] .prose ul, html[lang="ar"] .prose ol { margin-left: 0; margin-right: 1.5rem; }
-        .prose strong { color: #facc15; }
 
-        .qi-card-design {
-            background: linear-gradient(135deg, #eab308, #ca8a04);
-            border-radius: 16px; padding: 20px; color: black; position: relative; box-shadow: 0 10px 25px rgba(234, 179, 8, 0.3);
-            border: 1px solid rgba(255,255,255,0.4); text-align: left;
+        /* Subtle Ambient Mesh Background */
+        .ambient-bg {
+            position: fixed; inset: 0; z-index: -1;
+            background: 
+                radial-gradient(circle at 15% 15%, rgba(234, 179, 8, 0.08), transparent 35%),
+                radial-gradient(circle at 85% 80%, rgba(59, 130, 246, 0.06), transparent 40%),
+                #070b14;
         }
-        .qi-chip { width: 40px; height: 30px; background: #fbbf24; border-radius: 4px; margin-bottom: 15px; border: 1px solid #b45309; }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.78);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .gold-border-glow {
+            border: 1px solid rgba(234, 179, 8, 0.35);
+            box-shadow: 0 20px 50px -15px rgba(234, 179, 8, 0.12);
+        }
+
+        .hidden { display: none !important; }
+
+        /* Course Content Typography */
+        .prose h2, .prose h3 { color: #facc15; font-weight: 800; margin-top: 1.75rem; margin-bottom: 0.75rem; border-bottom: 1px solid #1e293b; padding-bottom: 0.5rem; font-size: 1.35rem; }
+        .prose h4 { color: #ffffff; font-weight: 700; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .prose p { margin-bottom: 1rem; line-height: 1.8; color: #cbd5e1; }
+        .prose ul, .prose ol { margin-inline-start: 1.5rem; margin-bottom: 1.25rem; color: #cbd5e1; }
+        .prose li { margin-bottom: 0.5rem; line-height: 1.7; }
+        .prose strong { color: #fde047; }
     </style>
 </head>
-<body class="antialiased min-h-screen">
-    <div class="animated-bg"></div>
+<body class="antialiased min-h-screen flex flex-col justify-between">
+    <div class="ambient-bg"></div>
 
-    <!-- Top Nav -->
-    <nav class="p-4 flex justify-between items-center max-w-7xl mx-auto border-b border-gray-800">
-        <div class="text-white font-black text-2xl tracking-widest uppercase">COURSE<span class="text-yellow-500">PORTAL</span></div>
-        <button onclick="toggleLanguage()" id="lang-btn" class="glass px-5 py-2 text-sm font-bold hover:bg-yellow-500 hover:text-black transition rounded-lg">English</button>
-    </nav>
-
-    <!-- App Container -->
-    <div id="app-container" class="max-w-7xl mx-auto p-4 pb-20">
-
-        <!-- SCREEN 1: LANDING & LOGIN -->
-        <div id="screen-login" class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mt-12">
-            <div>
-                <div class="inline-block bg-red-600/90 text-white px-4 py-1.5 rounded-full text-xs font-bold mb-6 animate-pulse border border-red-400">
-                    <i class="fas fa-fire mr-1"></i> <span data-ar="عرض محدود" data-en="Limited Offer">عرض محدود</span>: 15,000 IQD
+    <!-- Top Navigation -->
+    <header class="border-b border-white/5 bg-[#070b14]/80 backdrop-blur-md sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-yellow-400 to-amber-600 flex items-center justify-center text-black font-black shadow-md">
+                    <i class="fas fa-bolt"></i>
                 </div>
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-black mb-6 leading-tight">
-                    <span data-ar="اصنع ثروة من" data-en="Make a fortune by">اصنع ثروة من</span> <br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600" data-ar="قص فيديوهات الستريمرز" data-en="clipping streamers">قص فيديوهات الستريمرز</span>
-                </h1>
-                <p class="text-gray-300 text-lg md:text-xl mb-10 leading-relaxed" data-ar="الدليل الشامل خطوة بخطوة للبدء في جني الأرباح من الإنترنت في العراق بدون خبرة سابقة. مضمون." data-en="The complete step-by-step guide to start making money online in Iraq with zero experience. Guaranteed.">
-                    الدليل الشامل خطوة بخطوة للبدء في جني الأرباح من الإنترنت في العراق بدون خبرة سابقة. مضمون.
-                </p>
-
-                <div class="glass p-8 relative overflow-hidden">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-yellow-600"></div>
-                    <p class="text-sm text-gray-300 font-bold mb-3" data-ar="أدخل رقمك للبدء أو المتابعة" data-en="Enter phone number to start or resume"></p>
-                    <div class="flex gap-2">
-                        <div class="bg-gray-800 px-4 py-4 rounded-lg text-gray-400 font-bold flex items-center border border-gray-700">
-                            +964 <img src="https://flagcdn.com/w20/iq.png" class="ml-2 w-5 rounded-sm">
-                        </div>
-                        <input type="text" id="phone" placeholder="07XXXXXXXX" class="w-full p-4 bg-gray-900 border border-gray-700 rounded-lg focus:border-yellow-500 outline-none text-white text-left font-bold" dir="ltr">
-                    </div>
-                    <button onclick="handleLogin()" class="w-full mt-5 bg-yellow-500 text-black font-black p-4 rounded-lg hover:bg-yellow-400 transition transform hover:-translate-y-1 shadow-[0_5px_20px_rgba(234,179,8,0.4)] text-lg" data-ar="ابدأ الآن - 15,000 دينار" data-en="Unlock Masterclass - 15,000 IQD">ابدأ الآن - 15,000 دينار</button>
+                <div>
+                    <span class="font-black text-base sm:text-lg tracking-tight text-white block leading-none" data-ar="أكاديمية صناعة المقاطع" data-en="CLIPPING MASTERCLASS">أكاديمية صناعة المقاطع</span>
+                    <span class="text-[11px] text-emerald-400 font-semibold flex items-center gap-1 mt-0.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span data-ar="نظام التفعيل الفوري داخل العراق" data-en="Instant Access System • Iraq">نظام التفعيل الفوري داخل العراق</span>
+                    </span>
                 </div>
             </div>
 
-            <!-- Social Proof -->
-            <div class="glass p-8 text-center">
-                <h3 class="font-bold text-2xl mb-6 text-white" data-ar="نتائج حقيقية من العراق" data-en="Real Results from Iraq">نتائج حقيقية من العراق</h3>
+            <div class="flex items-center gap-3">
+                <button onclick="toggleLanguage()" id="lang-btn" class="px-3.5 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-xs sm:text-sm font-bold text-slate-200 border border-white/10 transition flex items-center gap-2">
+                    <i class="fas fa-globe text-yellow-400"></i>
+                    <span id="lang-btn-text">English</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12 w-full flex-grow">
+
+        <!-- ================= SCREEN 1: LANDING & LOGIN ================= -->
+        <div id="screen-login">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
                 
-                <p class="text-sm text-yellow-500 font-bold uppercase tracking-widest mb-3" data-ar="صفحات نمتلكها" data-en="Pages We Own"></p>
-                <div class="grid grid-cols-3 gap-3 mb-8">
-                    <img src="/images/page1.jpg" onerror="this.src='https://placehold.co/150x250/1e293b/FFF?text=Page+1'" class="rounded-lg shadow-lg w-full object-cover aspect-[9/16] border border-gray-700 hover:scale-105 transition">
-                    <img src="/images/page2.jpg" onerror="this.src='https://placehold.co/150x250/1e293b/FFF?text=Page+2'" class="rounded-lg shadow-lg w-full object-cover aspect-[9/16] border border-gray-700 hover:scale-105 transition">
-                    <img src="/images/page3.jpg" onerror="this.src='https://placehold.co/150x250/1e293b/FFF?text=Page+3'" class="rounded-lg shadow-lg w-full object-cover aspect-[9/16] border border-gray-700 hover:scale-105 transition">
+                <!-- Hero & Checkout Login Column (7 cols) -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/30 text-yellow-300 px-3.5 py-1.5 rounded-full text-xs font-bold">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <span data-ar="الدليل التطبيقي الأول في العراق لصناعة مقاطع الستريمرز" data-en="Iraq's #1 Practical Guide to Streamer Clipping">الدليل التطبيقي الأول في العراق لصناعة مقاطع الستريمرز</span>
+                    </div>
+
+                    <h1 class="text-3xl sm:text-5xl font-black leading-[1.2] tracking-tight text-white">
+                        <span data-ar="احترف قص مقاطع الستريمرز وحوّل المشاهدات إلى" data-en="Master Streamer Clipping & Turn Views Into">احترف قص مقاطع الستريمرز وحوّل المشاهدات إلى</span>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-400 to-amber-500 block mt-1" data-ar="مصدر دخل حقيقي بالدولار" data-en="Real Monthly USD Income">مصدر دخل حقيقي بالدولار</span>
+                    </h1>
+
+                    <p class="text-slate-300 text-base sm:text-lg leading-relaxed" data-ar="تعلّم خطوة بخطوة كيف تختار اللحظات الأكثر انتشاراً للستريمرز الأجانب والعرب، وتمنتجها بالذكاء الاصطناعي خلال دقائق، وتستلم أرباحك داخل العراق بطرق مجربة وفعّالة." data-en="Learn step-by-step how to source viral moments from top streamers, edit them in minutes using AI tools, and cash out your earnings directly inside Iraq.">
+                        تعلّم خطوة بخطوة كيف تختار اللحظات الأكثر انتشاراً للستريمرز الأجانب والعرب، وتمنتجها بالذكاء الاصطناعي خلال دقائق، وتستلم أرباحك داخل العراق بطرق مجربة وفعّالة.
+                    </p>
+
+                    <!-- Login / Registration Box -->
+                    <div class="glass-card gold-border-glow rounded-2xl p-6 sm:p-8 relative overflow-hidden">
+                        <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-5 border-b border-white/10">
+                            <div>
+                                <span class="text-xs text-slate-400 block" data-ar="سعر الانضمام الكامل (دفعة واحدة)" data-en="Full Masterclass Access (One-Time Payment)">سعر الانضمام الكامل (دفعة واحدة)</span>
+                                <div class="flex items-baseline gap-2 mt-0.5">
+                                    <span class="text-2xl sm:text-3xl font-black text-yellow-400">15,000 IQD</span>
+                                    <span class="text-xs text-slate-500 line-through">45,000 IQD</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 bg-yellow-400/10 border border-yellow-400/30 px-3 py-1.5 rounded-lg">
+                                <img src="/images/qi-logo.png" onerror="this.style.display='none'; document.getElementById('qi-badge-hero').classList.remove('hidden');" class="h-5 object-contain" alt="Qi">
+                                <span id="qi-badge-hero" class="hidden bg-yellow-400 text-black font-black text-xs px-2 py-0.5 rounded">Qi</span>
+                                <span class="text-xs font-bold text-yellow-300" data-ar="دفع آمن عبر كي كارد / SuperQi" data-en="Instant Qi Card / SuperQi Checkout">دفع آمن عبر كي كارد / SuperQi</span>
+                            </div>
+                        </div>
+
+                        <label class="block text-xs sm:text-sm font-bold text-slate-200 mb-2" data-ar="أدخل رقم هاتفك العراقي للبدء أو للدخول إلى حسابك السابق:" data-en="Enter your Iraqi phone number to enroll or access your existing account:">
+                            أدخل رقم هاتفك العراقي للبدء أو للدخول إلى حسابك السابق:
+                        </label>
+
+                        <div class="flex gap-2.5" dir="ltr">
+                            <div class="bg-slate-900/90 px-3.5 py-3.5 rounded-xl text-slate-300 font-bold flex items-center gap-2 border border-slate-700 shrink-0 text-sm">
+                                <img src="https://flagcdn.com/w20/iq.png" class="w-5 rounded-sm" alt="IQ">
+                                <span>+964</span>
+                            </div>
+                            <input type="tel" id="phone" placeholder="0770XXXXXXX" class="w-full px-4 py-3.5 bg-slate-900/90 border border-slate-700 rounded-xl focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 outline-none text-white text-left font-bold tracking-wider text-base transition">
+                        </div>
+
+                        <button onclick="handleLogin()" class="w-full mt-4 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-slate-950 font-black py-4 px-6 rounded-xl transition transform active:scale-[0.99] shadow-lg shadow-yellow-500/20 flex items-center justify-center gap-2 text-base sm:text-lg">
+                            <span data-ar="متابعة إلى صفحة الدفع والدخول" data-en="Continue to Instant Access">متابعة إلى صفحة الدفع والدخول</span>
+                            <i class="fas fa-arrow-left text-sm" id="cta-arrow"></i>
+                        </button>
+
+                        <div class="grid grid-cols-3 gap-2 mt-5 pt-4 border-t border-white/5 text-center text-[11px] sm:text-xs text-slate-400">
+                            <div><i class="fas fa-bolt text-yellow-400 ml-1 mr-1"></i> <span data-ar="تفعيل خلال دقائق" data-en="Fast Activation">تفعيل خلال دقائق</span></div>
+                            <div><i class="fas fa-infinity text-yellow-400 ml-1 mr-1"></i> <span data-ar="وصول مدى الحياة" data-en="Lifetime Access">وصول مدى الحياة</span></div>
+                            <div><i class="fas fa-mobile-alt text-yellow-400 ml-1 mr-1"></i> <span data-ar="يعمل على الهاتف والحاسوب" data-en="Mobile & PC Ready">يعمل على الهاتف والحاسوب</span></div>
+                        </div>
+                    </div>
+
+                    <!-- What You Learn Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
+                        <div class="glass-card p-4 rounded-xl flex items-start gap-3.5">
+                            <div class="w-9 h-9 rounded-lg bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 shrink-0 mt-0.5"><i class="fab fa-tiktok"></i></div>
+                            <div>
+                                <h4 class="font-bold text-sm text-white" data-ar="خوارزميات الانتشار السريع" data-en="Viral Algorithm Mastery">خوارزميات الانتشار السريع</h4>
+                                <p class="text-xs text-slate-400 mt-1" data-ar="كيف ترفع نسبة المشاهدة وتتصدر الترند في تيك توك وريلز وشورتس بدون حظر." data-en="How to hook viewers in 3 seconds and trigger millions of organic views."></p>
+                            </div>
+                        </div>
+                        <div class="glass-card p-4 rounded-xl flex items-start gap-3.5">
+                            <div class="w-9 h-9 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0 mt-0.5"><i class="fab fa-twitch"></i></div>
+                            <div>
+                                <h4 class="font-bold text-sm text-white" data-ar="استخراج المقاطع بالذكاء الاصطناعي" data-en="AI Clipping & Sourcing">استخراج المقاطع بالذكاء الاصطناعي</h4>
+                                <p class="text-xs text-slate-400 mt-1" data-ar="شرح أدوات OpusClip و Katto و CapCut لقص وترجمة الساعات الطويلة بدقائق." data-en="Full workflow for OpusClip, Katto, and CapCut to produce 5+ clips daily."></p>
+                            </div>
+                        </div>
+                        <div class="glass-card p-4 rounded-xl flex items-start gap-3.5">
+                            <div class="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0 mt-0.5"><i class="fas fa-dollar-sign"></i></div>
+                            <div>
+                                <h4 class="font-bold text-sm text-white" data-ar="طرق استلام الأرباح في العراق" data-en="Cashing Out in Iraq">طرق استلام الأرباح في العراق</h4>
+                                <p class="text-xs text-slate-400 mt-1" data-ar="الربح من يوتيوب شورتس، بيع الحسابات الأجنبية، والتسويق بالعمولة." data-en="YouTube Shorts AdSense, flipping US TikTok accounts, and affiliate links."></p>
+                            </div>
+                        </div>
+                        <div class="glass-card p-4 rounded-xl flex items-start gap-3.5">
+                            <div class="w-9 h-9 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shrink-0 mt-0.5"><i class="fas fa-rocket"></i></div>
+                            <div>
+                                <h4 class="font-bold text-sm text-white" data-ar="خطة أول ١٤ يوم (من الصفر)" data-en="14-Day Zero-to-Upload Plan">خطة أول ١٤ يوم (من الصفر)</h4>
+                                <p class="text-xs text-slate-400 mt-1" data-ar="جدول عملي يومي من تهيئة الحساب الجديد حتى نشر أول مقطع يحقق مشاهدات." data-en="Step-by-step account warm-up and daily posting schedule for beginners."></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <p class="text-sm text-green-400 font-bold uppercase tracking-widest mb-3" data-ar="أرباح تم سحبها" data-en="Money Withdrawn"></p>
-                <div class="grid grid-cols-3 gap-3">
-                    <img src="/images/withdraw1.jpg" onerror="this.src='https://placehold.co/150x250/1e293b/FFF?text=Money+1'" class="rounded-lg shadow-lg w-full object-cover aspect-[9/16] border border-gray-700 hover:scale-105 transition">
-                    <img src="/images/withdraw2.jpg" onerror="this.src='https://placehold.co/150x250/1e293b/FFF?text=Money+2'" class="rounded-lg shadow-lg w-full object-cover aspect-[9/16] border border-gray-700 hover:scale-105 transition">
-                    <img src="/images/withdraw3.jpg" onerror="this.src='https://placehold.co/150x250/1e293b/FFF?text=Money+3'" class="rounded-lg shadow-lg w-full object-cover aspect-[9/16] border border-gray-700 hover:scale-105 transition">
+                <!-- Right Column: Proof & Results Showcase (5 cols) -->
+                <div class="lg:col-span-5 glass-card rounded-2xl p-6 border border-white/10">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-white/10">
+                        <div>
+                            <h3 class="font-black text-lg text-white" data-ar="نماذج من القنوات والأرباح" data-en="Verified Pages & Payouts">نماذج من القنوات والأرباح</h3>
+                            <p class="text-xs text-slate-400" data-ar="نتائج فعلية باستخدام نفس استراتيجيات الكورس" data-en="Real results generated using the exact system inside"></p>
+                        </div>
+                        <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px] font-bold px-2.5 py-1 rounded-full">
+                            <i class="fas fa-check-circle"></i> <span data-ar="موثّق" data-en="Verified">موثّق</span>
+                        </span>
+                    </div>
+
+                    <!-- 3 Pages Section -->
+                    <p class="text-xs font-bold text-yellow-400 mb-2.5 flex items-center gap-1.5">
+                        <i class="fas fa-fire"></i>
+                        <span data-ar="إحصائيات الصفحات والمشاهدات:" data-en="Pages & Views Analytics:">إحصائيات الصفحات والمشاهدات:</span>
+                    </p>
+                    <div class="grid grid-cols-3 gap-2.5 mb-6">
+                        <!-- Page 1 -->
+                        <div class="relative rounded-xl overflow-hidden border border-white/10 bg-slate-900 aspect-[9/14] flex flex-col justify-between p-2.5">
+                            <img src="/images/page1.jpg" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" class="absolute inset-0 w-full h-full object-cover z-10" alt="Page 1">
+                            <div class="flex flex-col justify-between h-full text-left" dir="ltr">
+                                <div class="flex items-center justify-between text-[10px] text-slate-400"><i class="fab fa-tiktok text-pink-500 text-sm"></i> <span>28d</span></div>
+                                <div>
+                                    <div class="text-xs text-slate-400">Video Views</div>
+                                    <div class="text-base sm:text-lg font-black text-white">4.8M</div>
+                                    <div class="text-[10px] text-emerald-400 font-bold">+412% ↑</div>
+                                </div>
+                                <div class="text-[10px] bg-white/5 rounded px-1.5 py-1 text-slate-300 truncate">Followers: 64.2K</div>
+                            </div>
+                        </div>
+                        <!-- Page 2 -->
+                        <div class="relative rounded-xl overflow-hidden border border-white/10 bg-slate-900 aspect-[9/14] flex flex-col justify-between p-2.5">
+                            <img src="/images/page2.jpg" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" class="absolute inset-0 w-full h-full object-cover z-10" alt="Page 2">
+                            <div class="flex flex-col justify-between h-full text-left" dir="ltr">
+                                <div class="flex items-center justify-between text-[10px] text-slate-400"><i class="fab fa-youtube text-red-500 text-sm"></i> <span>Shorts</span></div>
+                                <div>
+                                    <div class="text-xs text-slate-400">Channel Views</div>
+                                    <div class="text-base sm:text-lg font-black text-white">11.2M</div>
+                                    <div class="text-[10px] text-emerald-400 font-bold">Monetized ✓</div>
+                                </div>
+                                <div class="text-[10px] bg-white/5 rounded px-1.5 py-1 text-slate-300 truncate">Subs: +29.4K</div>
+                            </div>
+                        </div>
+                        <!-- Page 3 -->
+                        <div class="relative rounded-xl overflow-hidden border border-white/10 bg-slate-900 aspect-[9/14] flex flex-col justify-between p-2.5">
+                            <img src="/images/page3.jpg" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" class="absolute inset-0 w-full h-full object-cover z-10" alt="Page 3">
+                            <div class="flex flex-col justify-between h-full text-left" dir="ltr">
+                                <div class="flex items-center justify-between text-[10px] text-slate-400"><i class="fab fa-instagram text-purple-400 text-sm"></i> <span>Reels</span></div>
+                                <div>
+                                    <div class="text-xs text-slate-400">Accounts Reached</div>
+                                    <div class="text-base sm:text-lg font-black text-white">3.1M</div>
+                                    <div class="text-[10px] text-emerald-400 font-bold">+280% ↑</div>
+                                </div>
+                                <div class="text-[10px] bg-white/5 rounded px-1.5 py-1 text-slate-300 truncate">Followers: 41.8K</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3 Withdrawals Section -->
+                    <p class="text-xs font-bold text-emerald-400 mb-2.5 flex items-center gap-1.5">
+                        <i class="fas fa-wallet"></i>
+                        <span data-ar="إثباتات سحب الأرباح:" data-en="Recent Payout Proofs:">إثباتات سحب الأرباح:</span>
+                    </p>
+                    <div class="grid grid-cols-3 gap-2.5">
+                        <!-- Withdraw 1 -->
+                        <div class="relative rounded-xl overflow-hidden border border-emerald-500/20 bg-slate-900 aspect-[9/14] flex flex-col justify-between p-2.5">
+                            <img src="/images/withdraw1.jpg" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" class="absolute inset-0 w-full h-full object-cover z-10" alt="Payout 1">
+                            <div class="flex flex-col justify-between h-full text-left" dir="ltr">
+                                <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded w-max font-bold">USDT TRC20</span>
+                                <div>
+                                    <div class="text-[10px] text-slate-400">Account Sale</div>
+                                    <div class="text-base sm:text-lg font-black text-emerald-400">+$450.00</div>
+                                </div>
+                                <div class="text-[10px] text-slate-400">Completed ✓</div>
+                            </div>
+                        </div>
+                        <!-- Withdraw 2 -->
+                        <div class="relative rounded-xl overflow-hidden border border-emerald-500/20 bg-slate-900 aspect-[9/14] flex flex-col justify-between p-2.5">
+                            <img src="/images/withdraw2.jpg" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" class="absolute inset-0 w-full h-full object-cover z-10" alt="Payout 2">
+                            <div class="flex flex-col justify-between h-full text-left" dir="ltr">
+                                <span class="text-[10px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded w-max font-bold">AdSense</span>
+                                <div>
+                                    <div class="text-[10px] text-slate-400">Shorts Rev</div>
+                                    <div class="text-base sm:text-lg font-black text-emerald-400">+$680.40</div>
+                                </div>
+                                <div class="text-[10px] text-slate-400">Paid Out ✓</div>
+                            </div>
+                        </div>
+                        <!-- Withdraw 3 -->
+                        <div class="relative rounded-xl overflow-hidden border border-emerald-500/20 bg-slate-900 aspect-[9/14] flex flex-col justify-between p-2.5">
+                            <img src="/images/withdraw3.jpg" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" class="absolute inset-0 w-full h-full object-cover z-10" alt="Payout 3">
+                            <div class="flex flex-col justify-between h-full text-left" dir="ltr">
+                                <span class="text-[10px] bg-yellow-500/20 text-yellow-300 px-1.5 py-0.5 rounded w-max font-bold">Qi Cashout</span>
+                                <div>
+                                    <div class="text-[10px] text-slate-400">Local Transfer</div>
+                                    <div class="text-sm sm:text-base font-black text-yellow-400">790,000 IQD</div>
+                                </div>
+                                <div class="text-[10px] text-slate-400">Received ✓</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================= SCREEN 2: OFFICIAL QI CHECKOUT ================= -->
+        <div id="screen-payment" class="max-w-lg mx-auto hidden mt-4">
+            <div class="glass-card rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+                
+                <!-- Top Invoice Header -->
+                <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 p-6 border-b border-white/10 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-yellow-400 uppercase tracking-wider block" data-ar="بوابة التفعيل الفوري" data-en="Instant Activation Checkout">بوابة التفعيل الفوري</span>
+                        <h2 class="text-xl sm:text-2xl font-black text-white mt-0.5" data-ar="إتمام الدفع عبر كي كارد" data-en="Complete Qi Card Transfer">إتمام الدفع عبر كي كارد</h2>
+                    </div>
+                    <!-- Qi Logo with Clean Built-in Fallback -->
+                    <div class="flex items-center">
+                        <img src="/images/qi-logo.png" onerror="this.style.display='none'; document.getElementById('qi-svg-fallback').classList.remove('hidden');" class="h-11 object-contain" alt="Qi Card">
+                        <div id="qi-svg-fallback" class="hidden w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-400 to-amber-500 flex flex-col items-center justify-center text-slate-950 shadow-md border border-yellow-200">
+                            <span class="font-black text-lg leading-none tracking-tighter">Qi</span>
+                            <span class="text-[8px] font-extrabold uppercase tracking-widest">SuperQi</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 space-y-5">
+                    <!-- Payment Method Notice (Clean & Professional) -->
+                    <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3.5 flex items-center gap-3">
+                        <i class="fas fa-info-circle text-yellow-400 text-lg shrink-0"></i>
+                        <p class="text-xs sm:text-sm font-semibold text-amber-100 leading-snug" data-ar="يتم الدفع حصرياً عن طريق تطبيق SuperQi أو كي كارد (تحويل زين كاش غير مدعوم حالياً)." data-en="Payments are accepted exclusively via SuperQi / Qi Card transfer (ZainCash is not supported).">
+                            يتم الدفع حصرياً عن طريق تطبيق SuperQi أو كي كارد (تحويل زين كاش غير مدعوم حالياً).
+                        </p>
+                    </div>
+
+                    <!-- Step 1: Transfer Details Invoice Card -->
+                    <div class="bg-slate-950/90 border border-slate-800 rounded-xl p-4 space-y-4">
+                        <div class="flex justify-between items-center pb-3 border-b border-slate-800/80">
+                            <span class="text-xs text-slate-400 font-semibold" data-ar="المبلغ المطلوب تحويله:" data-en="Amount to Transfer:">المبلغ المطلوب تحويله:</span>
+                            <span class="text-lg font-black text-yellow-400">15,000 IQD</span>
+                        </div>
+
+                        <!-- Account Number with Copy Button -->
+                        <div>
+                            <label class="text-xs text-slate-400 block mb-1.5" data-ar="١. قم بتحويل المبلغ إلى رقم حساب كي كارد التالي:" data-en="1. Transfer 15,000 IQD to this Qi Account Number:">١. قم بتحويل المبلغ إلى رقم حساب كي كارد التالي:</label>
+                            <div class="flex items-center justify-between bg-slate-900 border border-slate-700/80 rounded-lg px-3.5 py-2.5" dir="ltr">
+                                <span id="display-account" class="font-mono text-lg sm:text-xl font-black text-white tracking-wider select-all">910114941305</span>
+                                <button type="button" onclick="copyText('display-account', 'copy-acc-text')" class="bg-yellow-400/15 hover:bg-yellow-400/25 text-yellow-300 border border-yellow-400/30 px-3 py-1.5 rounded-md text-xs font-bold transition flex items-center gap-1.5">
+                                    <i class="far fa-copy"></i>
+                                    <span id="copy-acc-text" data-ar="نسخ الرقم" data-en="Copy">نسخ الرقم</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Order Code with Copy Button -->
+                        <div>
+                            <label class="text-xs text-slate-400 block mb-1.5" data-ar="٢. كود الطلب الخاص بك (اختياري في ملاحظة التحويل):" data-en="2. Your Order Reference Code:">٢. كود الطلب الخاص بك (اختياري في ملاحظة التحويل):</label>
+                            <div class="flex items-center justify-between bg-slate-900 border border-slate-700/80 rounded-lg px-3.5 py-2" dir="ltr">
+                                <span id="display-code" class="font-mono text-base font-bold text-yellow-400 tracking-widest select-all">QI-00000</span>
+                                <button type="button" onclick="copyText('display-code', 'copy-code-text')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1 rounded-md text-xs font-bold transition flex items-center gap-1.5">
+                                    <i class="far fa-copy"></i>
+                                    <span id="copy-code-text" data-ar="نسخ الكود" data-en="Copy">نسخ الكود</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Transaction ID Input -->
+                    <div>
+                        <label class="block text-xs sm:text-sm font-bold text-slate-200 mb-2" data-ar="٣. أدخل رقم العملية / رقم الإشعار الموجود في الوصل:" data-en="3. Enter the Transaction / Reference Number from your receipt:">
+                            ٣. أدخل رقم العملية / رقم الإشعار الموجود في الوصل:
+                        </label>
+                        <input type="text" id="tx-id" placeholder="مثال: 20260918472..." class="w-full px-4 py-3.5 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-yellow-400 outline-none text-left font-mono text-sm transition" dir="ltr">
+                    </div>
+
+                    <!-- Step 3: Custom Receipt Screenshot Uploader -->
+                    <div>
+                        <label class="block text-xs sm:text-sm font-bold text-slate-200 mb-2" data-ar="٤. إرفاق لقطة شاشة لوصل التحويل (Screenshot):" data-en="4. Upload Transfer Receipt Screenshot:">
+                            ٤. إرفاق لقطة شاشة لوصل التحويل (Screenshot):
+                        </label>
+                        
+                        <input type="file" id="receipt" accept="image/*" class="hidden" onchange="previewReceipt(this)">
+                        <div onclick="document.getElementById('receipt').click()" class="border-2 border-dashed border-slate-700 hover:border-yellow-400/70 bg-slate-900/60 hover:bg-slate-900 rounded-xl p-5 text-center cursor-pointer transition">
+                            <div id="upload-placeholder" class="space-y-1.5">
+                                <div class="w-10 h-10 rounded-full bg-yellow-400/10 text-yellow-400 flex items-center justify-center mx-auto">
+                                    <i class="fas fa-cloud-upload-alt text-lg"></i>
+                                </div>
+                                <p class="text-xs sm:text-sm font-bold text-slate-200" data-ar="اضغط هنا لاختيار صورة الوصل من جهازك" data-en="Tap here to select receipt screenshot"></p>
+                                <p class="text-[11px] text-slate-500" data-ar="يدعم صور PNG, JPG من تطبيق SuperQi" data-en="Supports PNG or JPG screenshots from SuperQi"></p>
+                            </div>
+                            <div id="upload-preview-box" class="hidden flex items-center justify-between gap-3 text-left" dir="ltr">
+                                <div class="flex items-center gap-3 overflow-hidden">
+                                    <img id="receipt-preview-img" src="" class="w-12 h-12 rounded-lg object-cover border border-yellow-400/40 shrink-0" alt="Receipt">
+                                    <div class="truncate">
+                                        <p id="receipt-filename" class="text-xs font-bold text-emerald-400 truncate">receipt.jpg</p>
+                                        <p class="text-[11px] text-slate-400">Ready to submit ✓</p>
+                                    </div>
+                                </div>
+                                <span class="text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded font-semibold shrink-0">Change</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button id="submit-btn" onclick="submitPayment()" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-black py-4 px-6 rounded-xl transition shadow-lg shadow-emerald-500/20 text-base sm:text-lg flex items-center justify-center gap-2">
+                        <i class="fas fa-check-circle"></i>
+                        <span data-ar="تأكيد التحويل وفتح الكورس الآن" data-en="Verify Transfer & Unlock Course">تأكيد التحويل وفتح الكورس الآن</span>
+                    </button>
+
+                    <button onclick="switchScreen('screen-login')" class="w-full text-center text-xs text-slate-400 hover:text-white pt-1 transition" data-ar="← العودة لتغيير رقم الهاتف" data-en="← Back to change phone number">← العودة لتغيير رقم الهاتف</button>
                 </div>
             </div>
         </div>
 
-        <!-- SCREEN 2: QI PAYMENT -->
-        <div id="screen-payment" class="max-w-md mx-auto glass p-8 hidden mt-10">
-            <h2 class="text-3xl font-black mb-6 text-center text-white" data-ar="الدفع والتفعيل" data-en="Payment & Activation">الدفع والتفعيل</h2>
-            
-            <div class="bg-red-500/10 border border-red-500 p-4 rounded-lg mb-8 text-center flex flex-col items-center justify-center gap-2">
-                <i class="fas fa-exclamation-triangle text-red-500 text-2xl"></i>
-                <span class="text-sm font-bold text-red-200" data-ar="نحن ندعم كي كارد فقط. (لا يوجد زين كاش)" data-en="We ONLY accept Qi Card. (No ZainCash)">نحن ندعم كي كارد فقط. (لا يوجد زين كاش)</span>
+        <!-- ================= SCREEN 3: VERIFICATION LOADING ================= -->
+        <div id="screen-review" class="max-w-md mx-auto glass-card rounded-2xl p-10 hidden mt-12 text-center border border-yellow-500/30">
+            <div class="w-16 h-16 rounded-full bg-yellow-500/10 border border-yellow-500/30 flex items-center justify-center mx-auto mb-5">
+                <i class="fas fa-circle-notch fa-spin text-yellow-400 text-3xl"></i>
             </div>
-
-            <!-- Authentic Qi Design -->
-            <div class="qi-card-design mb-8" dir="ltr">
-                <div class="flex justify-between items-start mb-6">
-                    <div class="qi-chip"></div>
-                    <img src="/images/qi-logo.png" onerror="this.src='https://placehold.co/60x30/000/FFF?text=QI'" alt="Qi Logo" class="h-8 object-contain">
-                </div>
-                <p class="text-xs font-bold opacity-80 uppercase mb-1">Transfer 15,000 IQD to:</p>
-                <h3 class="text-3xl font-black tracking-wider mb-6" id="display-account">0770XXXXXXX</h3>
-                <div class="bg-black/90 text-yellow-400 p-3 rounded-lg text-center border border-yellow-500/50 shadow-inner">
-                    <span class="text-xs uppercase block text-gray-400 mb-1">Put this exactly in the transfer note:</span>
-                    <span id="display-code" class="text-2xl font-black tracking-widest"></span>
-                </div>
+            <h2 class="text-2xl font-black mb-2 text-white" data-ar="جاري مطابقة وصل التحويل..." data-en="Verifying Your Transfer...">جاري مطابقة وصل التحويل...</h2>
+            <p class="text-slate-300 text-sm leading-relaxed mb-6" data-ar="تم استلام صورة الوصل بنجاح. يقوم النظام حالياً بتفعيل حسابك، يرجى إبقاء هذه الصفحة مفتوحة (يستغرق التفعيل من دقيقة إلى 5 دقائق) وسيفتح الكورس تلقائياً." data-en="Your receipt has been received. Please keep this page open while your order is verified (usually 1–5 minutes). Your dashboard will unlock automatically.">
+                تم استلام صورة الوصل بنجاح. يقوم النظام حالياً بتفعيل حسابك، يرجى إبقاء هذه الصفحة مفتوحة (يستغرق التفعيل من دقيقة إلى 5 دقائق) وسيفتح الكورس تلقائياً.
+            </p>
+            <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 text-xs text-slate-400">
+                <span data-ar="تتم عملية التحديث تلقائياً كل 3 ثوانٍ..." data-en="Auto-checking status every 3 seconds...">تتم عملية التحديث تلقائياً كل 3 ثوانٍ...</span>
             </div>
-            
-            <label class="block text-sm font-bold text-gray-300 mb-2" data-ar="رقم الإشعار (Transaction ID)" data-en="Transaction ID">رقم الإشعار</label>
-            <input type="text" id="tx-id" class="w-full p-4 bg-gray-900 border border-gray-700 rounded-lg mb-5 text-white focus:border-yellow-500 outline-none text-left font-mono" dir="ltr">
-            
-            <label class="block text-sm font-bold text-gray-300 mb-2" data-ar="صورة الوصل (Screenshot)" data-en="Receipt Screenshot">صورة الوصل</label>
-            <input type="file" id="receipt" accept="image/*" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg mb-8 text-white cursor-pointer">
-            
-            <button onclick="submitPayment()" class="w-full bg-green-500 text-black font-black p-4 rounded-lg hover:bg-green-400 transition transform hover:-translate-y-1 text-lg shadow-lg" data-ar="إرسال للتفعيل الفوري" data-en="Submit for Instant Activation">إرسال للتفعيل الفوري</button>
         </div>
 
-        <!-- SCREEN 3: VERIFICATION -->
-        <div id="screen-review" class="max-w-md mx-auto glass p-12 hidden mt-20 text-center">
-            <i class="fas fa-circle-notch fa-spin text-yellow-500 text-6xl mb-6"></i>
-            <h2 class="text-3xl font-black mb-4 text-white" data-ar="جاري التحقق من الدفع..." data-en="Verifying Payment...">جاري التحقق من الدفع...</h2>
-            <p class="text-gray-400 text-base leading-relaxed" data-ar="يرجى إبقاء هذه الصفحة مفتوحة. يتم الآن مراجعة الوصل الخاص بك. (يستغرق من دقيقة الى ٥ دقائق)" data-en="Please keep this page open. An admin is reviewing your receipt. (Takes 1-5 minutes)">يرجى إبقاء هذه الصفحة مفتوحة. يتم الآن مراجعة الوصل الخاص بك.</p>
-        </div>
-
-        <!-- SCREEN 4: COURSE DASHBOARD -->
-        <div id="screen-course" class="w-full glass min-h-[85vh] hidden flex flex-col md:flex-row mt-6 overflow-hidden rounded-2xl border border-gray-700 shadow-2xl">
+        <!-- ================= SCREEN 4: COURSE DASHBOARD ================= -->
+        <div id="screen-course" class="w-full glass-card min-h-[82vh] hidden flex flex-col md:flex-row mt-2 overflow-hidden rounded-2xl border border-slate-800 shadow-2xl">
             
             <!-- Sidebar -->
-            <div class="w-full md:w-1/4 bg-gray-900/80 p-0 border-r border-gray-800 flex flex-col h-full">
-                <div class="p-6 border-b border-gray-800">
-                    <h3 class="text-xl font-black text-white" data-ar="المنهج الدراسي" data-en="Curriculum">المنهج الدراسي</h3>
+            <div class="w-full md:w-80 bg-slate-950/90 border-b md:border-b-0 md:border-l border-slate-800 flex flex-col shrink-0">
+                <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+                    <h3 class="text-base font-black text-white" data-ar="أقسام الكورس التدريبي" data-en="Masterclass Curriculum">أقسام الكورس التدريبي</h3>
+                    <span class="text-[11px] bg-emerald-500/15 text-emerald-400 px-2.5 py-0.5 rounded-full font-bold" data-ar="مفعّل ✓" data-en="Active ✓">مفعّل ✓</span>
                 </div>
                 
-                <!-- Launchpad Button (Pinned to top) -->
-                <div class="p-4">
-                    <button onclick="showLaunchpad()" class="w-full text-left bg-gradient-to-r from-blue-600 to-indigo-600 p-4 rounded-xl shadow-lg hover:shadow-indigo-500/50 transition transform hover:-translate-y-1 border border-indigo-400">
-                        <div class="font-black text-white text-lg">🚀 Launchpad</div>
-                        <div class="text-indigo-100 text-xs mt-1" data-ar="دليل الرفع الأول" data-en="Zero to First Upload">Zero to First Upload</div>
+                <!-- Launchpad Button -->
+                <div class="p-4 pb-2">
+                    <button onclick="showLaunchpad()" class="w-full text-right bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-950 p-3.5 rounded-xl shadow-md hover:brightness-105 transition flex items-center justify-between">
+                        <div>
+                            <div class="font-black text-sm" data-ar="🚀 خطة الانطلاق السريع" data-en="🚀 14-Day Launchpad">🚀 خطة الانطلاق السريع</div>
+                            <div class="text-slate-900 text-xs font-semibold mt-0.5" data-ar="من الصفر حتى أول مقطع" data-en="Zero to First Viral Upload">من الصفر حتى أول مقطع</div>
+                        </div>
+                        <i class="fas fa-play-circle text-xl"></i>
                     </button>
                 </div>
 
-                <div class="text-xs font-bold text-gray-500 uppercase tracking-widest px-6 pb-2 pt-2" data-ar="الوحدات الأساسية" data-en="Core Modules">الوحدات الأساسية</div>
+                <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider px-5 py-2" data-ar="الوحدات التعليمية" data-en="Core Training Modules">الوحدات التعليمية</div>
                 <div id="module-list" class="flex-1 overflow-y-auto px-4 space-y-2 pb-6">
-                    <!-- Javascript populates this -->
+                    <!-- Javascript populates modules -->
                 </div>
             </div>
             
             <!-- Main Content Area -->
-            <div class="w-full md:w-3/4 p-6 md:p-12 bg-[#0b1120] overflow-y-auto h-[85vh]">
-                <h1 id="course-title" class="text-3xl md:text-5xl font-black text-white mb-8">Welcome</h1>
-                <div id="course-text" class="prose text-gray-300">
-                    Select a module on the left to begin learning.
-                </div>
+            <div id="course-scroll-area" class="flex-1 p-6 sm:p-10 bg-[#090e1a] overflow-y-auto max-h-[82vh]">
+                <h1 id="course-title" class="text-2xl sm:text-4xl font-black text-white mb-6 pb-4 border-b border-slate-800"></h1>
+                <div id="course-text" class="prose max-w-none"></div>
             </div>
         </div>
-    </div>
 
-    <!-- Notification Toast -->
-    <div id="toast" class="fixed bottom-6 right-6 bg-gray-900 border-l-4 border-yellow-500 p-4 rounded-lg shadow-[0_10px_25px_rgba(0,0,0,0.5)] hidden transition-all z-50 flex items-center">
-        <i class="fas fa-shopping-cart text-yellow-500 mr-3 text-xl"></i> 
-        <p class="text-sm text-white font-bold"><span id="toast-msg"></span></p>
+    </main>
+
+    <!-- Bilingual Live Enrollment Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 left-5 sm:left-auto sm:w-80 glass-card border-r-4 border-yellow-400 p-3.5 rounded-xl shadow-2xl hidden z-50 flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg bg-yellow-400/15 text-yellow-400 flex items-center justify-center shrink-0">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <p id="toast-msg" class="text-xs font-bold text-slate-100 leading-snug"></p>
     </div>
 
     <script>
@@ -187,33 +460,70 @@
             isEnglish = !isEnglish;
             document.documentElement.lang = isEnglish ? 'en' : 'ar';
             document.documentElement.dir = isEnglish ? 'ltr' : 'rtl';
-            document.getElementById('lang-btn').innerText = isEnglish ? 'عربي' : 'English';
+            document.getElementById('lang-btn-text').innerText = isEnglish ? 'العربية' : 'English';
             
+            const arrow = document.getElementById('cta-arrow');
+            if (arrow) {
+                arrow.className = isEnglish ? 'fas fa-arrow-right text-sm' : 'fas fa-arrow-left text-sm';
+            }
+
             document.querySelectorAll('[data-ar]').forEach(el => {
                 el.innerHTML = isEnglish ? el.getAttribute('data-en') : el.getAttribute('data-ar');
             });
         }
 
-        const fomoNames = ["Ali from Baghdad", "Mustafa from Basra", "Zainab from Erbil", "Hussein from Najaf", "Mohammed from Karbala", "Ahmed from Baghdad"];
+        function copyText(elementId, labelId) {
+            const text = document.getElementById(elementId).innerText.trim();
+            navigator.clipboard.writeText(text);
+            const label = document.getElementById(labelId);
+            const original = label.innerText;
+            label.innerText = isEnglish ? 'Copied ✓' : 'تم النسخ ✓';
+            setTimeout(() => { label.innerText = original; }, 2000);
+        }
+
+        function previewReceipt(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('receipt-preview-img').src = e.target.result;
+                    document.getElementById('receipt-filename').innerText = file.name;
+                    document.getElementById('upload-placeholder').classList.add('hidden');
+                    document.getElementById('upload-preview-box').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        const fomoPurchases = [
+            { ar: "انضم علي من بغداد إلى الكورس قبل دقيقتين", en: "Ali from Baghdad enrolled 2 minutes ago" },
+            { ar: "انضم مصطفى من البصرة إلى الكورس قبل 5 دقائق", en: "Mustafa from Basra enrolled 5 minutes ago" },
+            { ar: "انضم حسين من النجف إلى الكورس الآن", en: "Hussein from Najaf just unlocked the course" },
+            { ar: "انضم أحمد من أربيل إلى الكورس قبل 8 دقائق", en: "Ahmed from Erbil enrolled 8 minutes ago" }
+        ];
+
         setInterval(() => {
-            if(document.getElementById('screen-login').classList.contains('hidden')) return;
+            if (document.getElementById('screen-login').classList.contains('hidden')) return;
             const toast = document.getElementById('toast');
-            const name = fomoNames[Math.floor(Math.random() * fomoNames.length)];
-            document.getElementById('toast-msg').innerText = `${name} just bought the course!`;
+            const item = fomoPurchases[Math.floor(Math.random() * fomoPurchases.length)];
+            document.getElementById('toast-msg').innerText = isEnglish ? item.en : item.ar;
             toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.add('hidden'), 5000);
-        }, 15000);
+            setTimeout(() => toast.classList.add('hidden'), 4500);
+        }, 14000);
 
         function switchScreen(screenId) {
             ['screen-login', 'screen-payment', 'screen-review', 'screen-course'].forEach(id => {
                 document.getElementById(id).classList.add('hidden');
             });
             document.getElementById(screenId).classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         async function handleLogin() {
             const phone = document.getElementById('phone').value.trim();
-            if (!phone) return alert(isEnglish ? 'Enter a valid phone number' : 'أدخل رقم هاتف صحيح');
+            if (!phone || phone.length < 8) {
+                return alert(isEnglish ? 'Please enter a valid Iraqi phone number.' : 'يرجى إدخال رقم هاتف عراقي صحيح.');
+            }
             
             currentUserPhone = phone;
             const res = await fetch('/api/login', {
@@ -238,10 +548,16 @@
         }
 
         async function submitPayment() {
-            const txId = document.getElementById('tx-id').value;
+            const txId = document.getElementById('tx-id').value.trim();
             const fileInput = document.getElementById('receipt').files[0];
 
-            if (!txId || !fileInput) return alert(isEnglish ? 'TX ID and screenshot are required' : 'يرجى إدخال رقم الإشعار وصورة الوصل');
+            if (!txId || !fileInput) {
+                return alert(isEnglish ? 'Please enter the Transaction ID and attach the receipt screenshot.' : 'يرجى إدخال رقم الإشعار وإرفاق صورة وصل التحويل.');
+            }
+
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true;
+            btn.style.opacity = '0.6';
 
             const formData = new FormData();
             formData.append('orderCode', currentOrderCode);
@@ -249,14 +565,19 @@
             formData.append('txId', txId);
             formData.append('receipt', fileInput);
 
-            const res = await fetch('/api/submit-receipt', { method: 'POST', body: formData });
-            const data = await res.json();
-            
-            if (res.ok) {
-                switchScreen('screen-review');
-                pollingInterval = setInterval(checkStatus, 3000);
-            } else {
-                alert('Error: ' + data.error);
+            try {
+                const res = await fetch('/api/submit-receipt', { method: 'POST', body: formData });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    switchScreen('screen-review');
+                    pollingInterval = setInterval(checkStatus, 3000);
+                } else {
+                    alert(data.error || (isEnglish ? 'Submission error' : 'حدث خطأ أثناء الإرسال'));
+                }
+            } finally {
+                btn.disabled = false;
+                btn.style.opacity = '1';
             }
         }
 
@@ -269,14 +590,14 @@
                 loadCourseData();
             } else if (data.status === 'rejected') {
                 clearInterval(pollingInterval);
-                alert(isEnglish ? 'Payment rejected. Check details.' : 'تم رفض الدفع. يرجى التأكد من الإشعار.');
+                alert(isEnglish ? 'Transfer could not be verified. Please double-check your Transaction ID and receipt.' : 'تعذر التحقق من الوصل المرسل. يرجى التأكد من رقم الإشعار وصورة الوصل وإعادة المحاولة.');
                 switchScreen('screen-payment');
             }
         }
 
         async function loadCourseData() {
             const res = await fetch('/api/course-data/' + currentUserPhone);
-            if (!res.ok) return alert('Session expired.');
+            if (!res.ok) return alert(isEnglish ? 'Session expired.' : 'انتهت الجلسة، يرجى إعادة الدخول.');
             
             const data = await res.json();
             courseModules = data.modules;
@@ -287,12 +608,12 @@
             
             courseModules.forEach((mod, index) => {
                 list.innerHTML += `
-                <div onclick="showModule(${index})" class="p-4 bg-gray-800/50 rounded-lg cursor-pointer hover:bg-gray-700 transition border border-gray-700 text-gray-300 hover:text-white">
-                    <h4 class="font-bold text-sm leading-snug">${mod.title}</h4>
-                </div>`;
+                <button onclick="showModule(${index})" class="w-full text-right p-3.5 bg-slate-900 hover:bg-slate-800 rounded-xl transition border border-slate-800 hover:border-yellow-500/40 text-slate-200 hover:text-white block">
+                    <h4 class="font-bold text-xs sm:text-sm leading-snug">${mod.title}</h4>
+                </button>`;
             });
 
-            showLaunchpad(); // Default to launchpad
+            showLaunchpad();
             switchScreen('screen-course');
         }
 
@@ -300,16 +621,14 @@
             const mod = courseModules[index];
             document.getElementById('course-title').innerHTML = mod.title;
             document.getElementById('course-text').innerHTML = mod.content;
-            
-            // Scroll to top of content
-            document.querySelector('.md\\:w-3\\/4').scrollTop = 0;
+            document.getElementById('course-scroll-area').scrollTop = 0;
         }
 
         function showLaunchpad() {
-            if(!launchpadData) return;
+            if (!launchpadData) return;
             document.getElementById('course-title').innerHTML = launchpadData.title;
             document.getElementById('course-text').innerHTML = launchpadData.content;
-            document.querySelector('.md\\:w-3\\/4').scrollTop = 0;
+            document.getElementById('course-scroll-area').scrollTop = 0;
         }
     </script>
 </body>
