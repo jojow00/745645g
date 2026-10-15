@@ -8,53 +8,66 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap');
-        
         body { 
-            font-family: 'Cairo', sans-serif; 
+            font-family: system-ui, -apple-system, 'Segoe UI', Tahoma, Arial, sans-serif; 
             background-color: #070b14; 
             color: #f8fafc; 
             overflow-x: hidden; 
         }
-        html[lang="en"] body { font-family: 'Inter', sans-serif; }
 
-        /* Subtle Ambient Mesh Background */
         .ambient-bg {
             position: fixed; inset: 0; z-index: -1;
             background: 
-                radial-gradient(circle at 15% 15%, rgba(234, 179, 8, 0.08), transparent 35%),
-                radial-gradient(circle at 85% 80%, rgba(59, 130, 246, 0.06), transparent 40%),
+                radial-gradient(circle at 15% 15%, rgba(234, 179, 8, 0.09), transparent 35%),
+                radial-gradient(circle at 85% 80%, rgba(16, 185, 129, 0.06), transparent 40%),
                 #070b14;
         }
 
         .glass-card {
-            background: rgba(15, 23, 42, 0.78);
+            background: rgba(15, 23, 42, 0.82);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .gold-border-glow {
-            border: 1px solid rgba(234, 179, 8, 0.35);
-            box-shadow: 0 20px 50px -15px rgba(234, 179, 8, 0.12);
+            border: 1px solid rgba(234, 179, 8, 0.4);
+            box-shadow: 0 20px 50px -15px rgba(234, 179, 8, 0.15);
         }
 
         .hidden { display: none !important; }
 
-        /* Course Content Typography */
-        .prose h2, .prose h3 { color: #facc15; font-weight: 800; margin-top: 1.75rem; margin-bottom: 0.75rem; border-bottom: 1px solid #1e293b; padding-bottom: 0.5rem; font-size: 1.35rem; }
+        /* Course Content Typography (Supports Both RTL Arabic & LTR English cleanly) */
+        .prose h2, .prose h3 { color: #facc15; font-weight: 800; margin-top: 1.5rem; margin-bottom: 0.75rem; border-bottom: 1px solid #1e293b; padding-bottom: 0.5rem; font-size: 1.3rem; }
         .prose h4 { color: #ffffff; font-weight: 700; margin-top: 1.25rem; margin-bottom: 0.5rem; }
-        .prose p { margin-bottom: 1rem; line-height: 1.8; color: #cbd5e1; }
-        .prose ul, .prose ol { margin-inline-start: 1.5rem; margin-bottom: 1.25rem; color: #cbd5e1; }
-        .prose li { margin-bottom: 0.5rem; line-height: 1.7; }
+        .prose p { margin-bottom: 1rem; line-height: 1.85; color: #cbd5e1; font-size: 1.02rem; }
+        .prose ul, .prose ol { margin-inline-start: 1.5rem; margin-bottom: 1.25rem; color: #cbd5e1; list-style-type: disc; }
+        .prose ol { list-style-type: decimal; }
+        .prose li { margin-bottom: 0.6rem; line-height: 1.75; }
         .prose strong { color: #fde047; }
+
+        input[type="range"] {
+            accent-color: #facc15;
+        }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col justify-between">
     <div class="ambient-bg"></div>
 
+    <!-- Top Urgent 48-Hour FOMO Banner -->
+    <div class="bg-gradient-to-r from-red-950/90 via-amber-950/90 to-red-950/90 border-b border-yellow-500/30 py-2 px-4 text-center">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm">
+            <span class="bg-red-600 text-white font-black px-2.5 py-0.5 rounded-full text-[11px] uppercase tracking-wider animate-pulse" data-ar="خصم 85% لفترة محدودة" data-en="85% OFF LIMITED TIME">خصم 85% لفترة محدودة</span>
+            <span class="font-bold text-slate-200" data-ar="السعر 15,000 د.ع بدلاً من 100,000 د.ع — ينتهي العرض خلال:" data-en="15,000 IQD instead of 100,000 IQD — Offer resets in:">السعر 15,000 د.ع بدلاً من 100,000 د.ع — ينتهي العرض خلال:</span>
+            <div class="inline-flex items-center gap-1.5 font-mono font-black text-yellow-400 bg-black/50 px-3 py-0.5 rounded-lg border border-yellow-500/30" dir="ltr">
+                <i class="far fa-clock text-xs"></i>
+                <span id="countdown-banner">47:59:59</span>
+            </div>
+        </div>
+    </div>
+
     <!-- Top Navigation -->
-    <header class="border-b border-white/5 bg-[#070b14]/80 backdrop-blur-md sticky top-0 z-40">
+    <header class="border-b border-white/5 bg-[#070b14]/85 backdrop-blur-md sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-yellow-400 to-amber-600 flex items-center justify-center text-black font-black shadow-md">
@@ -69,7 +82,11 @@
                 </div>
             </div>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="focusLoginBox()" class="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 text-xs font-bold text-emerald-300 border border-emerald-500/30 transition flex items-center gap-1.5">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span data-ar="دخول المشتركين" data-en="Student Login">دخول المشتركين</span>
+                </button>
                 <button onclick="toggleLanguage()" id="lang-btn" class="px-3.5 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-xs sm:text-sm font-bold text-slate-200 border border-white/10 transition flex items-center gap-2">
                     <i class="fas fa-globe text-yellow-400"></i>
                     <span id="lang-btn-text">English</span>
@@ -78,100 +95,82 @@
         </div>
     </header>
 
-    <!-- Main Content Container -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12 w-full flex-grow">
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10 w-full flex-grow">
 
         <!-- ================= SCREEN 1: LANDING & LOGIN ================= -->
-        <div id="screen-login">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        <div id="screen-login" class="space-y-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
                 
-                <!-- Hero & Checkout Login Column (7 cols) -->
+                <!-- Left Column: Hero & Login/Checkout Box (7 cols) -->
                 <div class="lg:col-span-7 space-y-6">
                     <div class="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/30 text-yellow-300 px-3.5 py-1.5 rounded-full text-xs font-bold">
-                        <i class="fas fa-star text-yellow-400"></i>
-                        <span data-ar="الدليل التطبيقي الأول في العراق لصناعة مقاطع الستريمرز" data-en="Iraq's #1 Practical Guide to Streamer Clipping">الدليل التطبيقي الأول في العراق لصناعة مقاطع الستريمرز</span>
+                        <i class="fas fa-fire text-yellow-400"></i>
+                        <span data-ar="النظام العملي الأول في العراق للربح من قص المقاطع وحملات Whop" data-en="Iraq's #1 System for Streamer Clipping & Paid View Bounties">النظام العملي الأول في العراق للربح من قص المقاطع وحملات Whop</span>
                     </div>
 
                     <h1 class="text-3xl sm:text-5xl font-black leading-[1.2] tracking-tight text-white">
-                        <span data-ar="احترف قص مقاطع الستريمرز وحوّل المشاهدات إلى" data-en="Master Streamer Clipping & Turn Views Into">احترف قص مقاطع الستريمرز وحوّل المشاهدات إلى</span>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-400 to-amber-500 block mt-1" data-ar="مصدر دخل حقيقي بالدولار" data-en="Real Monthly USD Income">مصدر دخل حقيقي بالدولار</span>
+                        <span data-ar="احترف قص مقاطع الستريمرز واستلم أرباحك عن" data-en="Master Streamer Clipping & Get Paid For">احترف قص مقاطع الستريمرز واستلم أرباحك عن</span>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-400 to-amber-500 block mt-1" data-ar="كل 1,000 مشاهدة بالدولار والدينار" data-en="Every 1,000 Views in USD & IQD">كل 1,000 مشاهدة بالدولار والدينار</span>
                     </h1>
 
-                    <p class="text-slate-300 text-base sm:text-lg leading-relaxed" data-ar="تعلّم خطوة بخطوة كيف تختار اللحظات الأكثر انتشاراً للستريمرز الأجانب والعرب، وتمنتجها بالذكاء الاصطناعي خلال دقائق، وتستلم أرباحك داخل العراق بطرق مجربة وفعّالة." data-en="Learn step-by-step how to source viral moments from top streamers, edit them in minutes using AI tools, and cash out your earnings directly inside Iraq.">
-                        تعلّم خطوة بخطوة كيف تختار اللحظات الأكثر انتشاراً للستريمرز الأجانب والعرب، وتمنتجها بالذكاء الاصطناعي خلال دقائق، وتستلم أرباحك داخل العراق بطرق مجربة وفعّالة.
+                    <p class="text-slate-300 text-base sm:text-lg leading-relaxed" data-ar="تعلّم كيف تستخرج أقوى اللحظات من الستريمرز والبودكاست، وتمنتجها بالذكاء الاصطناعي وCapCut خلال دقائق، وتاربح من حملات Whop ويوتيوب شورتس وبيع الحسابات حتى لو كنت تبدأ من الصفر وبـ 0 متابع." data-en="Learn step-by-step how to source viral moments, edit them in minutes with AI & CapCut, and get paid per 1,000 views via Whop campaigns, YouTube Shorts, and account flipping—starting with 0 followers.">
+                        تعلّم كيف تستخرج أقوى اللحظات من الستريمرز والبودكاست، وتمنتجها بالذكاء الاصطناعي وCapCut خلال دقائق، وتاربح من حملات Whop ويوتيوب شورتس وبيع الحسابات حتى لو كنت تبدأ من الصفر وبـ 0 متابع.
                     </p>
 
-                    <!-- Login / Registration Box -->
-                    <div class="glass-card gold-border-glow rounded-2xl p-6 sm:p-8 relative overflow-hidden">
-                        <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-5 border-b border-white/10">
+                    <!-- Registration & Returning Student Login Box -->
+                    <div id="login-card-box" class="glass-card gold-border-glow rounded-2xl p-6 sm:p-7 relative overflow-hidden">
+                        
+                        <!-- Price & 48h FOMO Header -->
+                        <div class="flex flex-wrap items-center justify-between gap-4 pb-5 mb-5 border-b border-white/10">
                             <div>
-                                <span class="text-xs text-slate-400 block" data-ar="سعر الانضمام الكامل (دفعة واحدة)" data-en="Full Masterclass Access (One-Time Payment)">سعر الانضمام الكامل (دفعة واحدة)</span>
-                                <div class="flex items-baseline gap-2 mt-0.5">
-                                    <span class="text-2xl sm:text-3xl font-black text-yellow-400">15,000 IQD</span>
-                                    <span class="text-xs text-slate-500 line-through">45,000 IQD</span>
+                                <div class="flex items-center gap-2">
+                                    <span class="bg-red-500/20 text-red-300 border border-red-500/30 text-[11px] font-extrabold px-2 py-0.5 rounded" data-ar="وفّر 85,000 د.ع اليوم" data-en="SAVE 85,000 IQD TODAY">وفّر 85,000 د.ع اليوم</span>
+                                    <span class="text-xs text-amber-300 font-bold" data-ar="• متبقي 4 مقاعد بهذا السعر" data-en="• Only 4 spots left at this price">• متبقي 4 مقاعد بهذا السعر</span>
+                                </div>
+                                <div class="flex items-baseline gap-3 mt-1.5">
+                                    <span class="text-3xl sm:text-4xl font-black text-yellow-400">15,000 IQD</span>
+                                    <span class="text-sm sm:text-base text-slate-400 line-through font-bold">100,000 IQD</span>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-2 bg-yellow-400/10 border border-yellow-400/30 px-3 py-1.5 rounded-lg">
-                                <img src="/images/qi-logo.png" onerror="this.style.display='none'; document.getElementById('qi-badge-hero').classList.remove('hidden');" class="h-5 object-contain" alt="Qi">
-                                <span id="qi-badge-hero" class="hidden bg-yellow-400 text-black font-black text-xs px-2 py-0.5 rounded">Qi</span>
-                                <span class="text-xs font-bold text-yellow-300" data-ar="دفع آمن عبر كي كارد / SuperQi" data-en="Instant Qi Card / SuperQi Checkout">دفع آمن عبر كي كارد / SuperQi</span>
+
+                            <!-- 48-Hour Countdown Box -->
+                            <div class="bg-slate-950/90 border border-yellow-500/30 rounded-xl px-4 py-2.5 text-center">
+                                <span class="text-[10px] text-slate-400 font-bold block mb-1" data-ar="يعود السعر إلى 100,000 د.ع بعد:" data-en="Price returns to 100,000 IQD in:">يعود السعر إلى 100,000 د.ع بعد:</span>
+                                <div class="font-mono text-lg sm:text-xl font-black text-yellow-400 tracking-wider" dir="ltr" id="countdown-card">47:59:59</div>
                             </div>
                         </div>
 
-                        <label class="block text-xs sm:text-sm font-bold text-slate-200 mb-2" data-ar="أدخل رقم هاتفك العراقي للبدء أو للدخول إلى حسابك السابق:" data-en="Enter your Iraqi phone number to enroll or access your existing account:">
-                            أدخل رقم هاتفك العراقي للبدء أو للدخول إلى حسابك السابق:
-                        </label>
+                        <!-- Phone Input for New & Returning Approved Users -->
+                        <div class="flex items-center justify-between mb-2">
+                            <label class="text-xs sm:text-sm font-bold text-slate-100" data-ar="أدخل رقم هاتفك (للاشتراك الجديد أو للدخول إذا كان حسابك مفعّلاً):" data-en="Enter your phone number (New enrollment OR instant login if already approved):">
+                                أدخل رقم هاتفك (للاشتراك الجديد أو للدخول إذا كان حسابك مفعّلاً):
+                            </label>
+                        </div>
 
                         <div class="flex gap-2.5" dir="ltr">
-                            <div class="bg-slate-900/90 px-3.5 py-3.5 rounded-xl text-slate-300 font-bold flex items-center gap-2 border border-slate-700 shrink-0 text-sm">
-                                <img src="https://flagcdn.com/w20/iq.png" class="w-5 rounded-sm" alt="IQ">
+                            <div class="bg-slate-900/90 px-3.5 py-3.5 rounded-xl text-slate-200 font-bold flex items-center gap-2 border border-slate-700 shrink-0 text-sm">
+                                <!-- Crisp Inline SVG Flag of Iraq -->
+                                <svg class="w-5 h-3.5 rounded-sm shrink-0" viewBox="0 0 36 24">
+                                    <rect width="36" height="8" y="0" fill="#ce1126"/>
+                                    <rect width="36" height="8" y="8" fill="#ffffff"/>
+                                    <rect width="36" height="8" y="16" fill="#000000"/>
+                                    <text x="18" y="14" font-size="5" font-weight="bold" fill="#007a3d" text-anchor="middle">الله أكبر</text>
+                                </svg>
                                 <span>+964</span>
                             </div>
                             <input type="tel" id="phone" placeholder="0770XXXXXXX" class="w-full px-4 py-3.5 bg-slate-900/90 border border-slate-700 rounded-xl focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 outline-none text-white text-left font-bold tracking-wider text-base transition">
                         </div>
 
                         <button onclick="handleLogin()" class="w-full mt-4 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-slate-950 font-black py-4 px-6 rounded-xl transition transform active:scale-[0.99] shadow-lg shadow-yellow-500/20 flex items-center justify-center gap-2 text-base sm:text-lg">
-                            <span data-ar="متابعة إلى صفحة الدفع والدخول" data-en="Continue to Instant Access">متابعة إلى صفحة الدفع والدخول</span>
+                            <span data-ar="انضم الآن أو ادخل إلى حسابك المفعّل (15,000 د.ع)" data-en="Enroll Now or Login to Approved Account (15,000 IQD)">انضم الآن أو ادخل إلى حسابك المفعّل (15,000 د.ع)</span>
                             <i class="fas fa-arrow-left text-sm" id="cta-arrow"></i>
                         </button>
 
-                        <div class="grid grid-cols-3 gap-2 mt-5 pt-4 border-t border-white/5 text-center text-[11px] sm:text-xs text-slate-400">
-                            <div><i class="fas fa-bolt text-yellow-400 ml-1 mr-1"></i> <span data-ar="تفعيل خلال دقائق" data-en="Fast Activation">تفعيل خلال دقائق</span></div>
-                            <div><i class="fas fa-infinity text-yellow-400 ml-1 mr-1"></i> <span data-ar="وصول مدى الحياة" data-en="Lifetime Access">وصول مدى الحياة</span></div>
-                            <div><i class="fas fa-mobile-alt text-yellow-400 ml-1 mr-1"></i> <span data-ar="يعمل على الهاتف والحاسوب" data-en="Mobile & PC Ready">يعمل على الهاتف والحاسوب</span></div>
-                        </div>
-                    </div>
-
-                    <!-- What You Learn Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
-                        <div class="glass-card p-4 rounded-xl flex items-start gap-3.5">
-                            <div class="w-9 h-9 rounded-lg bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 shrink-0 mt-0.5"><i class="fab fa-tiktok"></i></div>
-                            <div>
-                                <h4 class="font-bold text-sm text-white" data-ar="خوارزميات الانتشار السريع" data-en="Viral Algorithm Mastery">خوارزميات الانتشار السريع</h4>
-                                <p class="text-xs text-slate-400 mt-1" data-ar="كيف ترفع نسبة المشاهدة وتتصدر الترند في تيك توك وريلز وشورتس بدون حظر." data-en="How to hook viewers in 3 seconds and trigger millions of organic views."></p>
-                            </div>
-                        </div>
-                        <div class="glass-card p-4 rounded-xl flex items-start gap-3.5">
-                            <div class="w-9 h-9 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0 mt-0.5"><i class="fab fa-twitch"></i></div>
-                            <div>
-                                <h4 class="font-bold text-sm text-white" data-ar="استخراج المقاطع بالذكاء الاصطناعي" data-en="AI Clipping & Sourcing">استخراج المقاطع بالذكاء الاصطناعي</h4>
-                                <p class="text-xs text-slate-400 mt-1" data-ar="شرح أدوات OpusClip و Katto و CapCut لقص وترجمة الساعات الطويلة بدقائق." data-en="Full workflow for OpusClip, Katto, and CapCut to produce 5+ clips daily."></p>
-                            </div>
-                        </div>
-                        <div class="glass-card p-4 rounded-xl flex items-start gap-3.5">
-                            <div class="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0 mt-0.5"><i class="fas fa-dollar-sign"></i></div>
-                            <div>
-                                <h4 class="font-bold text-sm text-white" data-ar="طرق استلام الأرباح في العراق" data-en="Cashing Out in Iraq">طرق استلام الأرباح في العراق</h4>
-                                <p class="text-xs text-slate-400 mt-1" data-ar="الربح من يوتيوب شورتس، بيع الحسابات الأجنبية، والتسويق بالعمولة." data-en="YouTube Shorts AdSense, flipping US TikTok accounts, and affiliate links."></p>
-                            </div>
-                        </div>
-                        <div class="glass-card p-4 rounded-xl flex items-start gap-3.5">
-                            <div class="w-9 h-9 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shrink-0 mt-0.5"><i class="fas fa-rocket"></i></div>
-                            <div>
-                                <h4 class="font-bold text-sm text-white" data-ar="خطة أول ١٤ يوم (من الصفر)" data-en="14-Day Zero-to-Upload Plan">خطة أول ١٤ يوم (من الصفر)</h4>
-                                <p class="text-xs text-slate-400 mt-1" data-ar="جدول عملي يومي من تهيئة الحساب الجديد حتى نشر أول مقطع يحقق مشاهدات." data-en="Step-by-step account warm-up and daily posting schedule for beginners."></p>
-                            </div>
-                        </div>
+                        <p class="text-[11px] text-emerald-400 font-semibold text-center mt-3">
+                            <i class="fas fa-unlock-alt ml-1 mr-1"></i>
+                            <span data-ar="ملاحظة للمشتركين: إذا قمت بالدفع سابقاً، فقط اكتب رقمك أعلاه وسيفتح الكورس فوراً بدون دفع مرة أخرى." data-en="Already approved? Simply enter the same phone number above to jump straight into the course dashboard.">ملاحظة للمشتركين: إذا قمت بالدفع سابقاً، فقط اكتب رقمك أعلاه وسيفتح الكورس فوراً بدون دفع مرة أخرى.</span>
+                        </p>
                     </div>
                 </div>
 
@@ -193,7 +192,6 @@
                         <span data-ar="إحصائيات الصفحات والمشاهدات:" data-en="Pages & Views Analytics:">إحصائيات الصفحات والمشاهدات:</span>
                     </p>
                     <div class="grid grid-cols-3 gap-2.5 mb-6">
-                        <!-- Page 1 -->
                         <div class="relative rounded-xl overflow-hidden border border-white/10 bg-slate-900 aspect-[9/14] flex flex-col justify-between p-2.5">
                             <img src="/images/page1.jpg" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" class="absolute inset-0 w-full h-full object-cover z-10" alt="Page 1">
                             <div class="flex flex-col justify-between h-full text-left" dir="ltr">
@@ -206,7 +204,6 @@
                                 <div class="text-[10px] bg-white/5 rounded px-1.5 py-1 text-slate-300 truncate">Followers: 64.2K</div>
                             </div>
                         </div>
-                        <!-- Page 2 -->
                         <div class="relative rounded-xl overflow-hidden border border-white/10 bg-slate-900 aspect-[9/14] flex flex-col justify-between p-2.5">
                             <img src="/images/page2.jpg" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" class="absolute inset-0 w-full h-full object-cover z-10" alt="Page 2">
                             <div class="flex flex-col justify-between h-full text-left" dir="ltr">
@@ -219,13 +216,12 @@
                                 <div class="text-[10px] bg-white/5 rounded px-1.5 py-1 text-slate-300 truncate">Subs: +29.4K</div>
                             </div>
                         </div>
-                        <!-- Page 3 -->
                         <div class="relative rounded-xl overflow-hidden border border-white/10 bg-slate-900 aspect-[9/14] flex flex-col justify-between p-2.5">
                             <img src="/images/page3.jpg" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" class="absolute inset-0 w-full h-full object-cover z-10" alt="Page 3">
                             <div class="flex flex-col justify-between h-full text-left" dir="ltr">
                                 <div class="flex items-center justify-between text-[10px] text-slate-400"><i class="fab fa-instagram text-purple-400 text-sm"></i> <span>Reels</span></div>
                                 <div>
-                                    <div class="text-xs text-slate-400">Accounts Reached</div>
+                                    <div class="text-xs text-slate-400">Reached</div>
                                     <div class="text-base sm:text-lg font-black text-white">3.1M</div>
                                     <div class="text-[10px] text-emerald-400 font-bold">+280% ↑</div>
                                 </div>
@@ -240,19 +236,17 @@
                         <span data-ar="إثباتات سحب الأرباح:" data-en="Recent Payout Proofs:">إثباتات سحب الأرباح:</span>
                     </p>
                     <div class="grid grid-cols-3 gap-2.5">
-                        <!-- Withdraw 1 -->
                         <div class="relative rounded-xl overflow-hidden border border-emerald-500/20 bg-slate-900 aspect-[9/14] flex flex-col justify-between p-2.5">
                             <img src="/images/withdraw1.jpg" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" class="absolute inset-0 w-full h-full object-cover z-10" alt="Payout 1">
                             <div class="flex flex-col justify-between h-full text-left" dir="ltr">
-                                <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded w-max font-bold">USDT TRC20</span>
+                                <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded w-max font-bold">Whop Bounty</span>
                                 <div>
-                                    <div class="text-[10px] text-slate-400">Account Sale</div>
+                                    <div class="text-[10px] text-slate-400">Verified Views</div>
                                     <div class="text-base sm:text-lg font-black text-emerald-400">+$450.00</div>
                                 </div>
-                                <div class="text-[10px] text-slate-400">Completed ✓</div>
+                                <div class="text-[10px] text-slate-400">Paid Out ✓</div>
                             </div>
                         </div>
-                        <!-- Withdraw 2 -->
                         <div class="relative rounded-xl overflow-hidden border border-emerald-500/20 bg-slate-900 aspect-[9/14] flex flex-col justify-between p-2.5">
                             <img src="/images/withdraw2.jpg" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" class="absolute inset-0 w-full h-full object-cover z-10" alt="Payout 2">
                             <div class="flex flex-col justify-between h-full text-left" dir="ltr">
@@ -264,7 +258,6 @@
                                 <div class="text-[10px] text-slate-400">Paid Out ✓</div>
                             </div>
                         </div>
-                        <!-- Withdraw 3 -->
                         <div class="relative rounded-xl overflow-hidden border border-emerald-500/20 bg-slate-900 aspect-[9/14] flex flex-col justify-between p-2.5">
                             <img src="/images/withdraw3.jpg" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" class="absolute inset-0 w-full h-full object-cover z-10" alt="Payout 3">
                             <div class="flex flex-col justify-between h-full text-left" dir="ltr">
@@ -278,7 +271,74 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
+            <!-- INTERACTIVE VIEWS-TO-INCOME CALCULATOR (IQD & USD Toggle) -->
+            <div class="glass-card rounded-2xl p-6 sm:p-8 border border-yellow-500/25">
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-white/10">
+                    <div>
+                        <span class="text-xs font-bold text-yellow-400 uppercase tracking-wider block" data-ar="حاسبة أرباح المشاهدات التفاعلية" data-en="Interactive Clipping Earnings Calculator">حاسبة أرباح المشاهدات التفاعلية</span>
+                        <h3 class="text-xl sm:text-2xl font-black text-white mt-0.5" data-ar="احسب دخلك المتوقع شهرياً من قص المقاطع" data-en="Calculate Your Potential Monthly Clipping Income">احسب دخلك المتوقع شهرياً من قص المقاطع</h3>
+                    </div>
+
+                    <!-- Currency Switcher: IQD vs USD -->
+                    <div class="flex items-center bg-slate-900 p-1 rounded-xl border border-slate-700">
+                        <button type="button" id="curr-iqd-btn" onclick="setCalcCurrency('IQD')" class="px-4 py-1.5 rounded-lg text-xs sm:text-sm font-black bg-yellow-400 text-slate-950 transition">
+                            IQD (دينار عراقي)
+                        </button>
+                        <button type="button" id="curr-usd-btn" onclick="setCalcCurrency('USD')" class="px-4 py-1.5 rounded-lg text-xs sm:text-sm font-black text-slate-300 hover:text-white transition">
+                            USD ($ دولار)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-7 space-y-6">
+                        <!-- Views Slider -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-xs sm:text-sm font-bold text-slate-300" data-ar="إجمالي المشاهدات الشهرية (عبر تيك توك + ريلز + شورتس):" data-en="Total Monthly Views (Across TikTok + Reels + Shorts):">إجمالي المشاهدات الشهرية (عبر تيك توك + ريلز + شورتس):</label>
+                                <span id="calc-views-display" class="text-base sm:text-lg font-black text-yellow-400 font-mono" dir="ltr">500,000 Views</span>
+                            </div>
+                            <input type="range" id="calc-views-slider" min="50000" max="5000000" step="50000" value="500000" oninput="updateCalculator()" class="w-full h-2.5 bg-slate-800 rounded-lg cursor-pointer">
+                            <div class="flex justify-between text-[11px] text-slate-500 mt-1 font-mono" dir="ltr">
+                                <span>50K</span>
+                                <span>1M</span>
+                                <span>2.5M</span>
+                                <span>5M Views</span>
+                            </div>
+                        </div>
+
+                        <!-- Rate Selector -->
+                        <div>
+                            <label class="text-xs sm:text-sm font-bold text-slate-300 block mb-2.5" data-ar="معدل الدفع لكل 1,000 مشاهدة (حسب نوع حملة Whop):" data-en="Payout Rate per 1,000 Views (Whop Campaign Tier):">معدل الدفع لكل 1,000 مشاهدة (حسب نوع حملة Whop):</label>
+                            <div class="grid grid-cols-3 gap-2.5">
+                                <button type="button" onclick="setCalcRate(1.0, this)" class="calc-rate-btn p-3 rounded-xl border border-slate-700 bg-slate-900/80 text-center hover:border-yellow-400/50 transition">
+                                    <div class="font-mono font-black text-sm sm:text-base text-white">$1.00 / 1K</div>
+                                    <div class="text-[11px] text-slate-400 mt-0.5" data-ar="حملة عادية" data-en="Standard">حملة عادية</div>
+                                </button>
+                                <button type="button" onclick="setCalcRate(1.5, this)" class="calc-rate-btn p-3 rounded-xl border border-yellow-400 bg-yellow-400/10 text-center transition">
+                                    <div class="font-mono font-black text-sm sm:text-base text-yellow-400">$1.50 / 1K</div>
+                                    <div class="text-[11px] text-yellow-200 mt-0.5" data-ar="متوسط الستريمرز" data-en="Streamer Avg">متوسط الستريمرز</div>
+                                </button>
+                                <button type="button" onclick="setCalcRate(3.0, this)" class="calc-rate-btn p-3 rounded-xl border border-slate-700 bg-slate-900/80 text-center hover:border-yellow-400/50 transition">
+                                    <div class="font-mono font-black text-sm sm:text-base text-white">$3.00 / 1K</div>
+                                    <div class="text-[11px] text-slate-400 mt-0.5" data-ar="حملات مميزة" data-en="Premium">حملات مميزة</div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Output Card -->
+                    <div class="lg:col-span-5 bg-slate-950/90 border border-emerald-500/30 rounded-2xl p-6 text-center space-y-3">
+                        <span class="text-xs font-bold text-slate-400 block" data-ar="الأرباح الشهرية المتوقعة:" data-en="Estimated Monthly Payout:">الأرباح الشهرية المتوقعة:</span>
+                        <div id="calc-primary-amount" class="text-3xl sm:text-4xl font-black text-emerald-400 font-mono tracking-tight" dir="ltr">1,125,000 IQD</div>
+                        <div id="calc-secondary-amount" class="text-xs sm:text-sm font-bold text-slate-400 font-mono" dir="ltr">≈ $750 USD / Month</div>
+                        <div class="pt-3 border-t border-slate-800">
+                            <button onclick="focusLoginBox()" class="w-full py-3 px-4 rounded-xl bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black text-xs sm:text-sm transition" data-ar="ابدأ بتطبيق هذه الاستراتيجية اليوم ←" data-en="Start Earning With This Strategy Today →">ابدأ بتطبيق هذه الاستراتيجية اليوم ←</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -286,13 +346,11 @@
         <div id="screen-payment" class="max-w-lg mx-auto hidden mt-4">
             <div class="glass-card rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
                 
-                <!-- Top Invoice Header -->
                 <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 p-6 border-b border-white/10 flex items-center justify-between">
                     <div>
                         <span class="text-xs font-bold text-yellow-400 uppercase tracking-wider block" data-ar="بوابة التفعيل الفوري" data-en="Instant Activation Checkout">بوابة التفعيل الفوري</span>
                         <h2 class="text-xl sm:text-2xl font-black text-white mt-0.5" data-ar="إتمام الدفع عبر كي كارد" data-en="Complete Qi Card Transfer">إتمام الدفع عبر كي كارد</h2>
                     </div>
-                    <!-- Qi Logo with Clean Built-in Fallback -->
                     <div class="flex items-center">
                         <img src="/images/qi-logo.png" onerror="this.style.display='none'; document.getElementById('qi-svg-fallback').classList.remove('hidden');" class="h-11 object-contain" alt="Qi Card">
                         <div id="qi-svg-fallback" class="hidden w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-400 to-amber-500 flex flex-col items-center justify-center text-slate-950 shadow-md border border-yellow-200">
@@ -303,7 +361,6 @@
                 </div>
 
                 <div class="p-6 space-y-5">
-                    <!-- Payment Method Notice (Clean & Professional) -->
                     <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3.5 flex items-center gap-3">
                         <i class="fas fa-info-circle text-yellow-400 text-lg shrink-0"></i>
                         <p class="text-xs sm:text-sm font-semibold text-amber-100 leading-snug" data-ar="يتم الدفع حصرياً عن طريق تطبيق SuperQi أو كي كارد (تحويل زين كاش غير مدعوم حالياً)." data-en="Payments are accepted exclusively via SuperQi / Qi Card transfer (ZainCash is not supported).">
@@ -311,14 +368,15 @@
                         </p>
                     </div>
 
-                    <!-- Step 1: Transfer Details Invoice Card -->
                     <div class="bg-slate-950/90 border border-slate-800 rounded-xl p-4 space-y-4">
                         <div class="flex justify-between items-center pb-3 border-b border-slate-800/80">
-                            <span class="text-xs text-slate-400 font-semibold" data-ar="المبلغ المطلوب تحويله:" data-en="Amount to Transfer:">المبلغ المطلوب تحويله:</span>
-                            <span class="text-lg font-black text-yellow-400">15,000 IQD</span>
+                            <span class="text-xs text-slate-400 font-semibold" data-ar="المبلغ المطلوب تحويله (بعد خصم 85%):" data-en="Amount to Transfer (85% OFF Applied):">المبلغ المطلوب تحويله (بعد خصم 85%):</span>
+                            <div class="flex items-baseline gap-2">
+                                <span class="text-xs text-slate-500 line-through">100,000</span>
+                                <span class="text-lg font-black text-yellow-400">15,000 IQD</span>
+                            </div>
                         </div>
 
-                        <!-- Account Number with Copy Button -->
                         <div>
                             <label class="text-xs text-slate-400 block mb-1.5" data-ar="١. قم بتحويل المبلغ إلى رقم حساب كي كارد التالي:" data-en="1. Transfer 15,000 IQD to this Qi Account Number:">١. قم بتحويل المبلغ إلى رقم حساب كي كارد التالي:</label>
                             <div class="flex items-center justify-between bg-slate-900 border border-slate-700/80 rounded-lg px-3.5 py-2.5" dir="ltr">
@@ -330,9 +388,8 @@
                             </div>
                         </div>
 
-                        <!-- Order Code with Copy Button -->
                         <div>
-                            <label class="text-xs text-slate-400 block mb-1.5" data-ar="٢. كود الطلب الخاص بك (اختياري في ملاحظة التحويل):" data-en="2. Your Order Reference Code:">٢. كود الطلب الخاص بك (اختياري في ملاحظة التحويل):</label>
+                            <label class="text-xs text-slate-400 block mb-1.5" data-ar="٢. كود الطلب الخاص بك (ضعه في ملاحظة التحويل إن وجد):" data-en="2. Your Order Reference Code:">٢. كود الطلب الخاص بك (ضعه في ملاحظة التحويل إن وجد):</label>
                             <div class="flex items-center justify-between bg-slate-900 border border-slate-700/80 rounded-lg px-3.5 py-2" dir="ltr">
                                 <span id="display-code" class="font-mono text-base font-bold text-yellow-400 tracking-widest select-all">QI-00000</span>
                                 <button type="button" onclick="copyText('display-code', 'copy-code-text')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1 rounded-md text-xs font-bold transition flex items-center gap-1.5">
@@ -343,35 +400,32 @@
                         </div>
                     </div>
 
-                    <!-- Step 2: Transaction ID Input -->
                     <div>
                         <label class="block text-xs sm:text-sm font-bold text-slate-200 mb-2" data-ar="٣. أدخل رقم العملية / رقم الإشعار الموجود في الوصل:" data-en="3. Enter the Transaction / Reference Number from your receipt:">
                             ٣. أدخل رقم العملية / رقم الإشعار الموجود في الوصل:
                         </label>
-                        <input type="text" id="tx-id" placeholder="مثال: 20260918472..." class="w-full px-4 py-3.5 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-yellow-400 outline-none text-left font-mono text-sm transition" dir="ltr">
+                        <input type="text" id="tx-id" placeholder="20260918472..." class="w-full px-4 py-3.5 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-yellow-400 outline-none text-left font-mono text-sm transition" dir="ltr">
                     </div>
 
-                    <!-- Step 3: Custom Receipt Screenshot Uploader -->
                     <div>
                         <label class="block text-xs sm:text-sm font-bold text-slate-200 mb-2" data-ar="٤. إرفاق لقطة شاشة لوصل التحويل (Screenshot):" data-en="4. Upload Transfer Receipt Screenshot:">
                             ٤. إرفاق لقطة شاشة لوصل التحويل (Screenshot):
                         </label>
-                        
                         <input type="file" id="receipt" accept="image/*" class="hidden" onchange="previewReceipt(this)">
                         <div onclick="document.getElementById('receipt').click()" class="border-2 border-dashed border-slate-700 hover:border-yellow-400/70 bg-slate-900/60 hover:bg-slate-900 rounded-xl p-5 text-center cursor-pointer transition">
                             <div id="upload-placeholder" class="space-y-1.5">
                                 <div class="w-10 h-10 rounded-full bg-yellow-400/10 text-yellow-400 flex items-center justify-center mx-auto">
                                     <i class="fas fa-cloud-upload-alt text-lg"></i>
                                 </div>
-                                <p class="text-xs sm:text-sm font-bold text-slate-200" data-ar="اضغط هنا لاختيار صورة الوصل من جهازك" data-en="Tap here to select receipt screenshot"></p>
-                                <p class="text-[11px] text-slate-500" data-ar="يدعم صور PNG, JPG من تطبيق SuperQi" data-en="Supports PNG or JPG screenshots from SuperQi"></p>
+                                <p class="text-xs sm:text-sm font-bold text-slate-200" data-ar="اضغط هنا لاختيار صورة الوصل من جهازك" data-en="Tap here to select receipt screenshot">اضغط هنا لاختيار صورة الوصل من جهازك</p>
+                                <p class="text-[11px] text-slate-500" data-ar="يدعم صور PNG, JPG من تطبيق SuperQi" data-en="Supports PNG or JPG screenshots from SuperQi">يدعم صور PNG, JPG من تطبيق SuperQi</p>
                             </div>
                             <div id="upload-preview-box" class="hidden flex items-center justify-between gap-3 text-left" dir="ltr">
                                 <div class="flex items-center gap-3 overflow-hidden">
                                     <img id="receipt-preview-img" src="" class="w-12 h-12 rounded-lg object-cover border border-yellow-400/40 shrink-0" alt="Receipt">
                                     <div class="truncate">
                                         <p id="receipt-filename" class="text-xs font-bold text-emerald-400 truncate">receipt.jpg</p>
-                                        <p class="text-[11px] text-slate-400">Ready to submit ✓</p>
+                                        <p class="text-[11px] text-slate-400">Ready ✓</p>
                                     </div>
                                 </div>
                                 <span class="text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded font-semibold shrink-0">Change</span>
@@ -379,7 +433,6 @@
                         </div>
                     </div>
 
-                    <!-- Submit Button -->
                     <button id="submit-btn" onclick="submitPayment()" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-black py-4 px-6 rounded-xl transition shadow-lg shadow-emerald-500/20 text-base sm:text-lg flex items-center justify-center gap-2">
                         <i class="fas fa-check-circle"></i>
                         <span data-ar="تأكيد التحويل وفتح الكورس الآن" data-en="Verify Transfer & Unlock Course">تأكيد التحويل وفتح الكورس الآن</span>
@@ -396,19 +449,16 @@
                 <i class="fas fa-circle-notch fa-spin text-yellow-400 text-3xl"></i>
             </div>
             <h2 class="text-2xl font-black mb-2 text-white" data-ar="جاري مطابقة وصل التحويل..." data-en="Verifying Your Transfer...">جاري مطابقة وصل التحويل...</h2>
-            <p class="text-slate-300 text-sm leading-relaxed mb-6" data-ar="تم استلام صورة الوصل بنجاح. يقوم النظام حالياً بتفعيل حسابك، يرجى إبقاء هذه الصفحة مفتوحة (يستغرق التفعيل من دقيقة إلى 5 دقائق) وسيفتح الكورس تلقائياً." data-en="Your receipt has been received. Please keep this page open while your order is verified (usually 1–5 minutes). Your dashboard will unlock automatically.">
+            <p class="text-slate-300 text-sm leading-relaxed mb-6" data-ar="تم استلام صورة الوصل بنجاح. يقوم النظام حالياً بتفعيل حسابك، يرجى إبقاء هذه الصفحة مفتوحة (يستغرق التفعيل من دقيقة إلى 5 دقائق) وسيفتح الكورس تلقائياً." data-en="Your receipt has been received. Please keep this page open while your order is verified (1–5 minutes). Your dashboard will unlock automatically.">
                 تم استلام صورة الوصل بنجاح. يقوم النظام حالياً بتفعيل حسابك، يرجى إبقاء هذه الصفحة مفتوحة (يستغرق التفعيل من دقيقة إلى 5 دقائق) وسيفتح الكورس تلقائياً.
             </p>
-            <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 text-xs text-slate-400">
-                <span data-ar="تتم عملية التحديث تلقائياً كل 3 ثوانٍ..." data-en="Auto-checking status every 3 seconds...">تتم عملية التحديث تلقائياً كل 3 ثوانٍ...</span>
-            </div>
         </div>
 
-        <!-- ================= SCREEN 4: COURSE DASHBOARD ================= -->
+        <!-- ================= SCREEN 4: BILINGUAL COURSE DASHBOARD ================= -->
         <div id="screen-course" class="w-full glass-card min-h-[82vh] hidden flex flex-col md:flex-row mt-2 overflow-hidden rounded-2xl border border-slate-800 shadow-2xl">
             
             <!-- Sidebar -->
-            <div class="w-full md:w-80 bg-slate-950/90 border-b md:border-b-0 md:border-l border-slate-800 flex flex-col shrink-0">
+            <div class="w-full md:w-80 bg-slate-950/90 border-b md:border-b-0 md:border-e border-slate-800 flex flex-col shrink-0">
                 <div class="p-5 border-b border-slate-800 flex items-center justify-between">
                     <h3 class="text-base font-black text-white" data-ar="أقسام الكورس التدريبي" data-en="Masterclass Curriculum">أقسام الكورس التدريبي</h3>
                     <span class="text-[11px] bg-emerald-500/15 text-emerald-400 px-2.5 py-0.5 rounded-full font-bold" data-ar="مفعّل ✓" data-en="Active ✓">مفعّل ✓</span>
@@ -416,7 +466,7 @@
                 
                 <!-- Launchpad Button -->
                 <div class="p-4 pb-2">
-                    <button onclick="showLaunchpad()" class="w-full text-right bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-950 p-3.5 rounded-xl shadow-md hover:brightness-105 transition flex items-center justify-between">
+                    <button onclick="showLaunchpad()" class="w-full text-start bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-950 p-3.5 rounded-xl shadow-md hover:brightness-105 transition flex items-center justify-between">
                         <div>
                             <div class="font-black text-sm" data-ar="🚀 خطة الانطلاق السريع" data-en="🚀 14-Day Launchpad">🚀 خطة الانطلاق السريع</div>
                             <div class="text-slate-900 text-xs font-semibold mt-0.5" data-ar="من الصفر حتى أول مقطع" data-en="Zero to First Viral Upload">من الصفر حتى أول مقطع</div>
@@ -425,15 +475,17 @@
                     </button>
                 </div>
 
-                <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider px-5 py-2" data-ar="الوحدات التعليمية" data-en="Core Training Modules">الوحدات التعليمية</div>
-                <div id="module-list" class="flex-1 overflow-y-auto px-4 space-y-2 pb-6">
-                    <!-- Javascript populates modules -->
+                <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider px-5 py-2" data-ar="الوحدات التعليمية (ملفات منفصلة)" data-en="Core Training Modules">الوحدات التعليمية (ملفات منفصلة)</div>
+                <div id="module-list" class="flex-1 overflow-y-auto px-4 space-y-2 pb-4"></div>
+
+                <div class="p-4 border-t border-slate-800 mt-auto">
+                    <button onclick="logoutStudent()" class="w-full py-2 px-3 rounded-lg bg-slate-900 hover:bg-slate-800 text-xs text-slate-400 hover:text-white transition" data-ar="تسجيل الخروج" data-en="Log Out">تسجيل الخروج</button>
                 </div>
             </div>
             
             <!-- Main Content Area -->
             <div id="course-scroll-area" class="flex-1 p-6 sm:p-10 bg-[#090e1a] overflow-y-auto max-h-[82vh]">
-                <h1 id="course-title" class="text-2xl sm:text-4xl font-black text-white mb-6 pb-4 border-b border-slate-800"></h1>
+                <h1 id="course-title" class="text-2xl sm:text-3xl font-black text-white mb-6 pb-4 border-b border-slate-800"></h1>
                 <div id="course-text" class="prose max-w-none"></div>
             </div>
         </div>
@@ -455,7 +507,77 @@
         let pollingInterval;
         let courseModules = [];
         let launchpadData = null;
+        let activeLessonIndex = 'launchpad'; // tracks open module so language toggle translates it live
 
+        // --- 1. PERPETUAL 48-HOUR RESETTING COUNTDOWN TIMER ---
+        const FORTY_EIGHT_HOURS_MS = 48 * 60 * 60 * 1000;
+        function update48hTimer() {
+            let deadline = parseInt(localStorage.getItem('offer_deadline_48h') || '0', 10);
+            const now = Date.now();
+            if (!deadline || now >= deadline) {
+                deadline = now + FORTY_EIGHT_HOURS_MS;
+                localStorage.setItem('offer_deadline_48h', String(deadline));
+            }
+            const diff = Math.max(0, deadline - now);
+            const hours = String(Math.floor(diff / (1000 * 60 * 60))).padStart(2, '0');
+            const mins = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            const secs = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+            const formatted = `${hours}:${mins}:${secs}`;
+            const b1 = document.getElementById('countdown-banner');
+            const b2 = document.getElementById('countdown-card');
+            if (b1) b1.innerText = formatted;
+            if (b2) b2.innerText = formatted;
+        }
+        setInterval(update48hTimer, 1000);
+        update48hTimer();
+
+        // --- 2. INTERACTIVE VIEWS CALCULATOR (IQD & USD) ---
+        let calcCurrency = 'IQD';
+        let calcRatePer1k = 1.5;
+        const IQD_EXCHANGE_RATE = 1500;
+
+        function setCalcCurrency(curr) {
+            calcCurrency = curr;
+            const iqdBtn = document.getElementById('curr-iqd-btn');
+            const usdBtn = document.getElementById('curr-usd-btn');
+            if (curr === 'IQD') {
+                iqdBtn.className = 'px-4 py-1.5 rounded-lg text-xs sm:text-sm font-black bg-yellow-400 text-slate-950 transition';
+                usdBtn.className = 'px-4 py-1.5 rounded-lg text-xs sm:text-sm font-black text-slate-300 hover:text-white transition';
+            } else {
+                usdBtn.className = 'px-4 py-1.5 rounded-lg text-xs sm:text-sm font-black bg-yellow-400 text-slate-950 transition';
+                iqdBtn.className = 'px-4 py-1.5 rounded-lg text-xs sm:text-sm font-black text-slate-300 hover:text-white transition';
+            }
+            updateCalculator();
+        }
+
+        function setCalcRate(rate, btnEl) {
+            calcRatePer1k = rate;
+            document.querySelectorAll('.calc-rate-btn').forEach(btn => {
+                btn.className = 'calc-rate-btn p-3 rounded-xl border border-slate-700 bg-slate-900/80 text-center hover:border-yellow-400/50 transition';
+            });
+            btnEl.className = 'calc-rate-btn p-3 rounded-xl border border-yellow-400 bg-yellow-400/10 text-center transition';
+            updateCalculator();
+        }
+
+        function updateCalculator() {
+            const views = parseInt(document.getElementById('calc-views-slider').value, 10);
+            document.getElementById('calc-views-display').innerText = views.toLocaleString('en-US') + ' Views';
+            const usdTotal = Math.round((views / 1000) * calcRatePer1k);
+            const iqdTotal = usdTotal * IQD_EXCHANGE_RATE;
+
+            const primaryEl = document.getElementById('calc-primary-amount');
+            const secondaryEl = document.getElementById('calc-secondary-amount');
+
+            if (calcCurrency === 'IQD') {
+                primaryEl.innerText = iqdTotal.toLocaleString('en-US') + ' IQD';
+                secondaryEl.innerText = `≈ $${usdTotal.toLocaleString('en-US')} USD / Month`;
+            } else {
+                primaryEl.innerText = '$' + usdTotal.toLocaleString('en-US') + ' USD';
+                secondaryEl.innerText = `≈ ${iqdTotal.toLocaleString('en-US')} IQD / Month`;
+            }
+        }
+
+        // --- 3. BILINGUAL TOGGLE (Translates UI + Open Course Modules) ---
         function toggleLanguage() {
             isEnglish = !isEnglish;
             document.documentElement.lang = isEnglish ? 'en' : 'ar';
@@ -470,6 +592,20 @@
             document.querySelectorAll('[data-ar]').forEach(el => {
                 el.innerHTML = isEnglish ? el.getAttribute('data-en') : el.getAttribute('data-ar');
             });
+
+            // Re-render sidebar and active lesson in the newly selected language
+            if (courseModules.length > 0) {
+                renderSidebarModules();
+                if (activeLessonIndex === 'launchpad') showLaunchpad();
+                else showModule(activeLessonIndex);
+            }
+        }
+
+        function focusLoginBox() {
+            switchScreen('screen-login');
+            const phoneInput = document.getElementById('phone');
+            phoneInput.focus();
+            document.getElementById('login-card-box').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
         function copyText(elementId, labelId) {
@@ -496,7 +632,7 @@
         }
 
         const fomoPurchases = [
-            { ar: "انضم علي من بغداد إلى الكورس قبل دقيقتين", en: "Ali from Baghdad enrolled 2 minutes ago" },
+            { ar: "انضم علي من بغداد إلى الكورس قبل دقيقتين (خصم 85%)", en: "Ali from Baghdad enrolled 2 minutes ago (85% OFF)" },
             { ar: "انضم مصطفى من البصرة إلى الكورس قبل 5 دقائق", en: "Mustafa from Basra enrolled 5 minutes ago" },
             { ar: "انضم حسين من النجف إلى الكورس الآن", en: "Hussein from Najaf just unlocked the course" },
             { ar: "انضم أحمد من أربيل إلى الكورس قبل 8 دقائق", en: "Ahmed from Erbil enrolled 8 minutes ago" }
@@ -519,32 +655,43 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        async function handleLogin() {
-            const phone = document.getElementById('phone').value.trim();
+        // --- 4. LOGIN & AUTO-RESUME FOR APPROVED USERS ---
+        async function handleLogin(autoPhone) {
+            const phone = (autoPhone || document.getElementById('phone').value).trim();
             if (!phone || phone.length < 8) {
                 return alert(isEnglish ? 'Please enter a valid Iraqi phone number.' : 'يرجى إدخال رقم هاتف عراقي صحيح.');
             }
             
-            currentUserPhone = phone;
             const res = await fetch('/api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phone })
             });
             const data = await res.json();
+            if (!res.ok) {
+                return alert(data.error || (isEnglish ? 'Invalid phone number' : 'رقم الهاتف غير صالح'));
+            }
             
+            currentUserPhone = data.phone || phone;
             currentOrderCode = data.orderCode;
             document.getElementById('display-account').innerText = data.qiAccount;
             document.getElementById('display-code').innerText = data.orderCode;
 
             if (data.status === 'approved') {
+                localStorage.setItem('approved_course_phone', currentUserPhone);
                 loadCourseData();
             } else if (data.status === 'review') {
                 switchScreen('screen-review');
+                clearInterval(pollingInterval);
                 pollingInterval = setInterval(checkStatus, 3000);
             } else {
-                switchScreen('screen-payment');
+                if (!autoPhone) switchScreen('screen-payment');
             }
+        }
+
+        function logoutStudent() {
+            localStorage.removeItem('approved_course_phone');
+            switchScreen('screen-login');
         }
 
         async function submitPayment() {
@@ -571,6 +718,7 @@
                 
                 if (res.ok) {
                     switchScreen('screen-review');
+                    clearInterval(pollingInterval);
                     pollingInterval = setInterval(checkStatus, 3000);
                 } else {
                     alert(data.error || (isEnglish ? 'Submission error' : 'حدث خطأ أثناء الإرسال'));
@@ -587,6 +735,7 @@
 
             if (data.status === 'approved') {
                 clearInterval(pollingInterval);
+                localStorage.setItem('approved_course_phone', currentUserPhone);
                 loadCourseData();
             } else if (data.status === 'rejected') {
                 clearInterval(pollingInterval);
@@ -595,41 +744,58 @@
             }
         }
 
+        function renderSidebarModules() {
+            const list = document.getElementById('module-list');
+            list.innerHTML = '';
+            courseModules.forEach((mod, index) => {
+                const title = isEnglish ? mod.title_en : mod.title_ar;
+                const isActive = activeLessonIndex === index;
+                list.innerHTML += `
+                <button onclick="showModule(${index})" class="w-full text-start p-3.5 rounded-xl transition border block ${isActive ? 'bg-yellow-400/15 border-yellow-400 text-white' : 'bg-slate-900 hover:bg-slate-800 border-slate-800 text-slate-200'}">
+                    <h4 class="font-bold text-xs sm:text-sm leading-snug">${title}</h4>
+                </button>`;
+            });
+        }
+
         async function loadCourseData() {
-            const res = await fetch('/api/course-data/' + currentUserPhone);
+            const res = await fetch('/api/course-data/' + encodeURIComponent(currentUserPhone));
             if (!res.ok) return alert(isEnglish ? 'Session expired.' : 'انتهت الجلسة، يرجى إعادة الدخول.');
             
             const data = await res.json();
             courseModules = data.modules;
             launchpadData = data.launchpad;
             
-            const list = document.getElementById('module-list');
-            list.innerHTML = '';
-            
-            courseModules.forEach((mod, index) => {
-                list.innerHTML += `
-                <button onclick="showModule(${index})" class="w-full text-right p-3.5 bg-slate-900 hover:bg-slate-800 rounded-xl transition border border-slate-800 hover:border-yellow-500/40 text-slate-200 hover:text-white block">
-                    <h4 class="font-bold text-xs sm:text-sm leading-snug">${mod.title}</h4>
-                </button>`;
-            });
-
+            renderSidebarModules();
             showLaunchpad();
             switchScreen('screen-course');
         }
 
         function showModule(index) {
+            activeLessonIndex = index;
             const mod = courseModules[index];
-            document.getElementById('course-title').innerHTML = mod.title;
-            document.getElementById('course-text').innerHTML = mod.content;
+            document.getElementById('course-title').innerHTML = isEnglish ? mod.title_en : mod.title_ar;
+            document.getElementById('course-text').innerHTML = isEnglish ? mod.content_en : mod.content_ar;
             document.getElementById('course-scroll-area').scrollTop = 0;
+            renderSidebarModules();
         }
 
         function showLaunchpad() {
             if (!launchpadData) return;
-            document.getElementById('course-title').innerHTML = launchpadData.title;
-            document.getElementById('course-text').innerHTML = launchpadData.content;
+            activeLessonIndex = 'launchpad';
+            document.getElementById('course-title').innerHTML = isEnglish ? launchpadData.title_en : launchpadData.title_ar;
+            document.getElementById('course-text').innerHTML = isEnglish ? launchpadData.content_en : launchpadData.content_ar;
             document.getElementById('course-scroll-area').scrollTop = 0;
+            renderSidebarModules();
         }
+
+        // Auto-login returning approved student if saved on their device
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedPhone = localStorage.getItem('approved_course_phone');
+            if (savedPhone) {
+                document.getElementById('phone').value = savedPhone;
+                handleLogin(savedPhone);
+            }
+        });
     </script>
 </body>
 </html>
